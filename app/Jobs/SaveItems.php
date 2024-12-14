@@ -131,7 +131,7 @@ class SaveItems implements ShouldQueue
         $discount = $item[9] ?? 0;
 
         if ($discount > 0) {
-          $percent = (1 - ($discount / $price)) * 10;
+          $percent = (1 - ($discount / $price)) * 100;
         } else {
           $percent = 0;
         }
