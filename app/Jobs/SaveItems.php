@@ -17,7 +17,8 @@ use App\Models\ProductTag;
 use App\Models\Specifications;
 use App\Models\SubCategory;
 use App\Models\Tag;
-
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use SoDe\Extend\File;
 use SoDe\Extend\JSON;
@@ -57,12 +58,27 @@ class SaveItems implements ShouldQueue
     }
 
     try {
+      $spCount = Specifications::count();
+      $glCount = Galerie::count();
+      $prCount = Products::count();
+      dump("Specifications: {$spCount}
+      Galerie: {$glCount}
+      Productos: {$prCount}");
+
       Specifications::whereNotNull('id')->delete();
       Galerie::whereNotNull('id')->delete();
       Products::whereNotNull('id')->delete();
-      Specifications::truncate();
-      Galerie::truncate();
-      Products::truncate();
+
+      $spCount = Specifications::count();
+      $glCount = Galerie::count();
+      $prCount = Products::count();
+      dump("Specifications: {$spCount}
+      Galerie: {$glCount}
+      Productos: {$prCount}");
+
+      DB::statement('ALTER TABLE specifications AUTO_INCREMENT = 1');
+      DB::statement('ALTER TABLE galeries AUTO_INCREMENT = 1');
+      DB::statement('ALTER TABLE products AUTO_INCREMENT = 1');
     } catch (\Throwable $th) {
       dump('Error: ' . $th->getMessage());
     }
