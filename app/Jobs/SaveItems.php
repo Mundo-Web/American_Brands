@@ -146,8 +146,8 @@ class SaveItems implements ShouldQueue
 
         $discountJpa = Discount::where('name', '=', $item[15])->where('status', true)->first();
 
-        $price = $item[8];
-        $discount = $item[9] ?? 0;
+        $price = \floatval($item[8]);
+        $discount = $item[9] == '' ? 0 : floatval($item[9]);
 
         if ($discount > 0) {
           $percent = (1 - ($discount / $price)) * 100;
