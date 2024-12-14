@@ -237,7 +237,7 @@ class SaveItems implements ShouldQueue
         dump($productImages);
         dump("{$productJpa->producto}\n{$productJpa->color} - {$productJpa->peso}\n{$discountJpa?->name}");
       } catch (\Throwable $th) {
-        dump($th->getMessage());
+        dump($item[0] . ': ' . $th->getMessage());
       }
     }
 
