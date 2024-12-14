@@ -57,6 +57,9 @@ class SaveItems implements ShouldQueue
     }
 
     try {
+      Specifications::whereNotNull('id')->delete();
+      Galerie::whereNotNull('id')->delete();
+      Products::whereNotNull('id')->delete();
       Specifications::truncate();
       Galerie::truncate();
       Products::truncate();
