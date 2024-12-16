@@ -247,7 +247,7 @@
                                         @foreach ($otherProducts as $x)
                                             @if (!empty($x->imagen))
                                                 <a class="ring-1 rounded-full p-[3px] ring-transparent hover:ring-[#3f3f3f]"
-                                                    href="{{ route('producto', $x->id) }}">
+                                                    href="{{ route('producto', $x->slug) }}">
                                                     <div class="flex justify-center items-center">
                                                         <div class="w-7 lg:w-9 h-7 lg:h-9 rounded-full overflow-hidden">
                                                             <img class="object-contain object-center"
@@ -358,7 +358,7 @@
                                 
                             <div class="flex flex-wrap gap-2">
                                 @foreach ($otherProducts as $x)
-                                <a class="block bg-[#F5F5F7] hover:bg-[#ebebf2] p-3" href="/producto/{{ $x->id }}" tippy> {{ $x->color }}</a>
+                                <a class="block bg-[#F5F5F7] hover:bg-[#ebebf2] p-3" href="/producto/{{ $x->slug }}" tippy> {{ $x->color }}</a>
                                 @endforeach
                             </div>
 

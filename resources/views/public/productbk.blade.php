@@ -341,7 +341,7 @@
                         @foreach ($combo->products as $item)
                           <div class="swiper-slide w-full h-full col-span-1">
                             <div class="flex flex-col items-center justify-center col-span-1  shadow-lg py-2  pb-5">
-                              <a href="/producto/{{ $item->id }}" target="_blanck">
+                              <a href="/producto/{{ $item->slug }}" target="_blanck">
                                 {{-- <img src="{{ asset('images\img\1.png') }}" alt="" class="h-40 w-40 ">
                                                                     <span> {{ $item->producto }}</span>
                                                                     <h2 class="font-Inter_Bold text-[#006BF6]">S/ 80.00</h2> --}}

@@ -26,6 +26,7 @@ use App\Models\Tag;
 use App\Models\TermsAndCondition;
 use App\Models\TimeAndPriceDelivery;
 use App\Models\TratamientoAdicionalDatos;
+use App\Observers\ItemSlugObserver;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Pagination\Paginator as PaginationPaginator;
 use Illuminate\Support\Facades\View;
@@ -144,5 +145,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         PaginationPaginator::useTailwind();
+
+        Products::observe(ItemSlugObserver::class);
     }
 }
