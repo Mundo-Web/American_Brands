@@ -39,207 +39,142 @@ class SaveItems implements ShouldQueue
 
   public function handle()
   {
-
+    // Ruta base para buscar imágenes
     $path2search = "./storage/images/products/";
-
     $images = [];
+
+    // Escanear imágenes en el directorio de productos
     try {
       $images = File::scan($path2search);
+      $imageMap = array_flip($images); // Crear índice de imágenes para búsquedas rápidas
     } catch (\Throwable $th) {
       dump($th->getMessage());
     }
 
-    try {
+    // Deshabilitar restricciones de claves foráneas para operaciones masivas
+    DB::statement('SET foreign_key_checks = 0');
+
+    DB::transaction(function () use ($images, $imageMap) {
+      // Desactivar visibilidad de categorías, subcategorías y logos de clientes
       Category::where('visible', 1)->update(['visible' => 0]);
       SubCategory::where('visible', 1)->update(['visible' => 0]);
       ClientLogos::where('visible', 1)->update(['visible' => 0]);
-    } catch (\Throwable $th) {
-      dump($th->getMessage());
-    }
 
-    try {
-      $spCount = Specifications::count();
-      $glCount = Galerie::count();
-      $prCount = Products::count();
-      dump("Specifications: {$spCount}
-      Galerie: {$glCount}
-      Productos: {$prCount}");
+      // Reiniciar datos de especificaciones, galerías y productos
+      Specifications::truncate();
+      Galerie::truncate();
+      Products::truncate();
 
-      Specifications::whereNotNull('id')->delete();
-      Galerie::whereNotNull('id')->delete();
-      Products::whereNotNull('id')->delete();
-
-      $spCount = Specifications::count();
-      $glCount = Galerie::count();
-      $prCount = Products::count();
-      dump("Specifications: {$spCount}
-      Galerie: {$glCount}
-      Productos: {$prCount}");
-
+      // Reiniciar índices de las tablas
       DB::statement('ALTER TABLE specifications AUTO_INCREMENT = 1');
       DB::statement('ALTER TABLE galeries AUTO_INCREMENT = 1');
       DB::statement('ALTER TABLE products AUTO_INCREMENT = 1');
-    } catch (\Throwable $th) {
-      dump('Error: ' . $th->getMessage());
-    }
 
-    dump('Inició la carga masiva: ' . count($this->items) . ' items');
+      dump('Inició la carga masiva: ' . count($this->items) . ' items');
 
-    foreach ($this->items as $item) {
-      try {
-        $imageRoute = \str_replace('{1}', $item[1], $this->image_route_pattern);
-        $imageRoute = \str_replace('{10}', $item[10], $imageRoute);
+      foreach ($this->items as $item) {
+        try {
+          // Generar ruta de imagen basada en el patrón
+          $imageRoute = \str_replace('{1}', $item[1], $this->image_route_pattern);
+          $imageRoute = \str_replace('{10}', $item[10], $imageRoute);
 
-        $productImages = \array_filter($images, fn($image) => Text::startsWith($image, $imageRoute));
+          $productImages = array_filter($images, fn($image) => isset($imageMap[$imageRoute]));
 
+          // Buscar o crear categoría
+          $category = Category::updateOrCreate(
+            ['name' => $item[5]],
+            ['slug' => Str::slug($item[5]), 'visible' => 1]
+          );
 
-        // Searching or Creating a Category
-        $categoryJpa = Category::updateOrCreate([
-          'name' => $item[5]
-        ], [
-          'name' => $item[5],
-          'slug' => Str::slug($item[5]),
-          'visible' => 1
-        ]);
-        // if (!$categoryJpa) {
-        //   $categoryJpa = Category::create([
-        //     'name' => $item[5],
-        //     'slug' => Str::slug($item[5])
-        //   ]);
-        // }
+          // Buscar o crear subcategoría
+          $subcategory = SubCategory::updateOrCreate(
+            ['category_id' => $category->id, 'name' => $item[6]],
+            ['slug' => Str::slug($item[6]), 'visible' => 1]
+          );
 
-        // Searching or Creating a Subcategory
-        // $subcategoryJpa = SubCategory::select()
-        //   ->where('category_id', $categoryJpa->id)
-        //   ->where('name', $item[6])
-        //   ->first();
+          // Buscar o crear marca
+          $brand = ClientLogos::updateOrCreate(
+            ['title' => $item[7]],
+            ['visible' => 1]
+          );
 
-        $subcategoryJpa = SubCategory::updateOrCreate([
-          'category_id' => $categoryJpa->id,
-          'name' => $item[6]
-        ], [
-          'category_id' => $categoryJpa->id,
-          'name' => $item[6],
-          'slug' => Str::slug($item[6]),
-          'visible' => 1
-        ]);
-        // if (!$subcategoryJpa) {
-        //   $subcategoryJpa = SubCategory::create([
-        //     'category_id' => $categoryJpa->id,
-        //     'name' => $item[6],
-        //     'slug' => Str::slug($item[6])
-        //   ]);
-        // }
+          // Buscar descuento si aplica
+          $discount = Discount::where('name', $item[15])->where('status', true)->first();
 
-        // Searching or Creating a Brand
-        // $brandJpa = ClientLogos::where('title', $item[7])->first();
-        // if (!$brandJpa) {
-        //   $brandJpa = ClientLogos::create(['title' => $item[7]]);
-        // }
+          // Calcular porcentaje de descuento
+          $price = \floatval($item[8]);
+          $discountValue = $item[9] == '' ? 0 : floatval($item[9]);
+          $percent = $discountValue > 0 ? (1 - ($discountValue / $price)) * 100 : 0;
 
-        $brandJpa = ClientLogos::updateOrCreate([
-          'title' => $item[7]
-        ], [
-          'title' => $item[7],
-          'visible' => 1
-        ]);
+          // Crear o actualizar producto
+          $product = Products::updateOrCreate(
+            ['sku' => $item[0]],
+            [
+              'codigo' => $item[1],
+              'producto' => $item[2],
+              'extract' => $item[3],
+              'description' => $item[4],
+              'categoria_id' => $category->id,
+              'subcategory_id' => $subcategory->id,
+              'marca_id' => $brand->id,
+              'precio' => $price,
+              'descuento' => $discountValue,
+              'color' => $item[10],
+              'peso' => $item[12],
+              'stock' => $item[13],
+              'discount_id' => $discount?->id,
+              'visible' => 1,
+              'percent_discount' => $percent
+            ]
+          );
 
-        $discountJpa = Discount::where('name', '=', $item[15])->where('status', true)->first();
-
-        $price = \floatval($item[8]);
-        $discount = $item[9] == '' ? 0 : floatval($item[9]);
-
-        if ($discount > 0) {
-          $percent = (1 - ($discount / $price)) * 100;
-        } else {
-          $percent = 0;
-        }
-
-        $productJpa = Products::updateOrCreate([
-          'sku' => $item[0],
-        ], [
-          'codigo' => $item[1],
-          'producto' => $item[2],
-          'extract' => $item[3],
-          'description' => $item[4],
-          'categoria_id' => $categoryJpa->id,
-          'subcategory_id' => $subcategoryJpa->id,
-          'marca_id' => $brandJpa->id,
-          'precio' => $item[8],
-          'descuento' => $item[9] ?? 0,
-          'color' => $item[10],
-          'peso' => $item[12],
-          'stock' => $item[13],
-          'discount_id' => $discountJpa?->id,
-          'visible' => 1,
-          'percent_discount' => $percent
-        ]);
-
-        $i = 0;
-        Galerie::where('product_id', $productJpa->id)->delete();
-
-        if (\count($productImages) == 0) {
-          $productJpa->visible = 0;
-          $productJpa->save();
-        }
-
-        foreach ($productImages as $image) {
-          try {
-            $productImage = 'storage/images/products/' . $image;
-            if ($i == 0) {
-              $productJpa->imagen = $productImage;
-              $productJpa->save();
-            } else {
-              Galerie::updateOrCreate([
-                'product_id' => $productJpa->id,
-                'imagen' => $productImage
-              ]);
+          // Asociar imágenes al producto
+          $i = 0;
+          Galerie::where('product_id', $product->id)->delete(); // Limpiar imágenes previas
+          if (count($productImages) == 0) {
+            $product->visible = 0; // Marcar producto como invisible si no tiene imágenes
+            $product->save();
+          } else {
+            foreach ($productImages as $image) {
+              $productImage = 'storage/images/products/' . $image;
+              if ($i == 0) {
+                $product->imagen = $productImage;
+                $product->save();
+              } else {
+                Galerie::create(['product_id' => $product->id, 'imagen' => $productImage]);
+              }
+              $i++;
             }
-          } catch (\Throwable $th) {
-            dump($th->getMessage());
-          }
-          $i++;
-        }
-
-        // Searching or Creating Tags
-        $tags = array_map(fn($x) => trim($x), explode(',', $item[14] ?? ''));
-        ProductTag::where('producto_id', $productJpa->id)->delete();
-        foreach ($tags as $tag) {
-          if (Text::nullOrEmpty($tag)) continue;
-          $tagJpa = Tag::where('name', $tag)->first();
-          if (!$tagJpa) {
-            $tagJpa = Tag::create([
-              'name' => $tag,
-              'slug' => Str::slug($tag)
-            ]);
           }
 
-          $tagJpa->update([
-            'status' => true,
-            'visible' => true
-          ]);
+          // Asociar etiquetas al producto
+          $tags = array_filter(array_map('trim', explode(',', $item[14] ?? '')));
+          ProductTag::where('producto_id', $product->id)->delete(); // Limpiar etiquetas previas
+          foreach ($tags as $tagName) {
+            if (Text::nullOrEmpty($tagName)) continue;
+            $tag = Tag::firstOrCreate(['name' => $tagName], ['slug' => Str::slug($tagName), 'status' => true, 'visible' => true]);
+            ProductTag::create(['producto_id' => $product->id, 'tag_id' => $tag->id]);
+          }
 
-          ProductTag::create([
-            'producto_id' => $productJpa->id,
-            'tag_id' => $tagJpa->id
-          ]);
+          // Asociar especificaciones al producto
+          if (!Text::nullOrEmpty($item[11])) {
+            Specifications::updateOrCreate(
+              ['product_id' => $product->id, 'tittle' => 'Color (HEX)'],
+              ['specifications' => $item[11]]
+            );
+          }
+
+          dump("Producto cargado: {$product->producto}");
+        } catch (\Throwable $th) {
+          dump("Error en SKU {$item[0]}: " . $th->getMessage());
         }
-
-        if (!Text::nullOrEmpty($item[11])) {
-          Specifications::updateOrCreate([
-            'product_id' => $productJpa->id,
-            'tittle' => 'Color (HEX)'
-          ], [
-            'specifications' => $item[11]
-          ]);
-        }
-
-        dump("{$productJpa->producto}\n{$productJpa->color} - {$productJpa->peso}\n{$discountJpa?->name}");
-      } catch (\Throwable $th) {
-        dump($item[0] . ': ' . $th->getMessage());
       }
-    }
 
-    dump('Finalizó la carga masiva');
+      dump('Finalizó la carga masiva');
+    });
+
+    // Restaurar restricciones de claves foráneas
+    DB::statement('SET foreign_key_checks = 1');
   }
+
 }
