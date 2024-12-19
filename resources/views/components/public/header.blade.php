@@ -543,7 +543,7 @@
                         data.forEach(function(result) {
                             const price = Number(result.precio) || 0
                             const discount = Number(result.descuento) || 0
-                            resultsHtml += `<a href="/producto/${result.id}">
+                            resultsHtml += `<a href="/producto/${result.slug}">
                             <div class="w-full flex flex-row py-3 px-3 hover:bg-slate-200">
                                 <div class="w-[15%]">
                                 <img class="w-20 rounded-0 object-center" src="${url}${result.imagen}" onerror="imagenError(this)" />
@@ -590,7 +590,7 @@
                         data.forEach(function(result) {
                             const price = Number(result.precio) || 0
                             const discount = Number(result.descuento) || 0
-                            resultsHtml += `<a class="" href="/producto/${result.id}">
+                            resultsHtml += `<a class="" href="/producto/${result.slug}">
                                 <div class="w-full flex flex-row py-3 px-3 hover:bg-slate-200">
                                     <div class="w-[15%]">
                                     <img class="w-20 rounded-md" src="${url}${result.imagen}" onerror="imagenError(this)" />

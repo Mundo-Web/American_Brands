@@ -348,7 +348,7 @@
                 <div class="swiper-wrapper">
                   @foreach ($destacados as $productosd)       
                     <div class="swiper-slide">
-                        <a href="{{route('producto', $productosd->id)}}">
+                        <a href="{{route('producto', $productosd->slug)}}">
                             <div class="flex flex-row justify-center items-center aspect-square">
                                 <div class="max-w-[350px] rounded-full  flex flex-col items-center p-5 ">
                                     <img class="w-full h-full object-contain rounded-full" src="{{ asset($productosd->imagen) }}" />
@@ -357,7 +357,7 @@
                         </a>
                         <div class="flex flex-col justify-center items-center gap-1 mt-3">
                           <p class="font-Urbanist_Semibold text-base text-black line-clamp-1">{{ optional($productosd->category)->name }}</p>
-                          <a href="{{route('producto', $productosd->id)}}">  
+                          <a href="{{route('producto', $productosd->slug)}}">  
                             <h2 class="font-Urbanist_Semibold text-base text-[#8f8f8f] line-clamp-1">{{$productosd->producto}}</h2>
                           </a>  
                           @if($productosd->descuento > 0)

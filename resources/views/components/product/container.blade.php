@@ -49,7 +49,7 @@
       </div>     
     </div>
 
-    <a href="{{ route('producto', $item->id) }}">
+    <a href="{{ route('producto', $item->slug) }}">
       <div>
         <div class="relative flex justify-center items-center aspect-square">
           @php
@@ -90,7 +90,7 @@
     @endif
   </div>
 
-  <a href="{{ route('producto', $item->id) }}">
+  <a href="{{ route('producto', $item->slug) }}">
     <h2 id="h2Container"
       class="block text-sm xl:text-base text-left overflow-hidden font-medium text-[#808080] font-Urbanist_Regular"
        style="display: -webkit-box;-webkit-line-clamp: 1;text-overflow: ellipsis;-webkit-box-orient: vertical;overflow: hidden;height: 20px;"

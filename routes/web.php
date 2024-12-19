@@ -95,7 +95,7 @@ Route::post('/agradecimiento', [IndexController::class, 'agradecimiento'])->name
 
 Route::post('/procesar/pago', [IndexController::class, 'procesarPago'])->name('procesar.pago');
 /* Catálogo y producto */
-Route::get('/producto/{id}', [IndexController::class, 'producto'])->name('producto');
+Route::get('/producto/{slug}', [IndexController::class, 'producto'])->name('producto');
 // Route::get('/catalogo', [IndexController::class, 'catalogo'])->name('catalogo.all');
 // Route::get('/catalogo/{category}', [IndexController::class, 'catalogo'])->name('catalogo');
 // Route::get('/catalogo/{category}/{subcategory}', [IndexController::class, 'catalogo'])->name('catalogo.sub');

@@ -293,7 +293,7 @@
     salesDataGrid.refresh()
   })
 
-  $('#invoice-status-id').on('click', function() {
+  $('#invoice-status-id').on('change', function() {
     const id = $('#invoice-id').val()
     const status_id = this.value
     fetch("{{ route('sales.status') }}", {

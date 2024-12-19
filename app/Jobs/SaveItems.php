@@ -17,7 +17,8 @@ use App\Models\ProductTag;
 use App\Models\Specifications;
 use App\Models\SubCategory;
 use App\Models\Tag;
-
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use SoDe\Extend\File;
 use SoDe\Extend\JSON;
@@ -57,9 +58,27 @@ class SaveItems implements ShouldQueue
     }
 
     try {
+      $spCount = Specifications::count();
+      $glCount = Galerie::count();
+      $prCount = Products::count();
+      dump("Specifications: {$spCount}
+      Galerie: {$glCount}
+      Productos: {$prCount}");
+
       Specifications::whereNotNull('id')->delete();
       Galerie::whereNotNull('id')->delete();
-      Products::truncate();
+      Products::whereNotNull('id')->delete();
+
+      $spCount = Specifications::count();
+      $glCount = Galerie::count();
+      $prCount = Products::count();
+      dump("Specifications: {$spCount}
+      Galerie: {$glCount}
+      Productos: {$prCount}");
+
+      DB::statement('ALTER TABLE specifications AUTO_INCREMENT = 1');
+      DB::statement('ALTER TABLE galeries AUTO_INCREMENT = 1');
+      DB::statement('ALTER TABLE products AUTO_INCREMENT = 1');
     } catch (\Throwable $th) {
       dump('Error: ' . $th->getMessage());
     }
@@ -127,11 +146,11 @@ class SaveItems implements ShouldQueue
 
         $discountJpa = Discount::where('name', '=', $item[15])->where('status', true)->first();
 
-        $price = $item[8];
-        $discount = $item[9] ?? 0;
+        $price = \floatval($item[8]);
+        $discount = $item[9] == '' ? 0 : floatval($item[9]);
 
         if ($discount > 0) {
-          $percent = (1 - ($discount / $price)) * 10;
+          $percent = (1 - ($discount / $price)) * 100;
         } else {
           $percent = 0;
         }
@@ -215,10 +234,9 @@ class SaveItems implements ShouldQueue
           ]);
         }
 
-        dump($productImages);
         dump("{$productJpa->producto}\n{$productJpa->color} - {$productJpa->peso}\n{$discountJpa?->name}");
       } catch (\Throwable $th) {
-        dump($th->getMessage());
+        dump($item[0] . ': ' . $th->getMessage());
       }
     }
 

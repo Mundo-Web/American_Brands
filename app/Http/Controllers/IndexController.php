@@ -112,7 +112,7 @@ class IndexController extends Controller
     $categoriasindex = Category::where('status', '=', 1)->where('destacar', '=', 1)->get();
     $media = $this->instagramService->getUserMedia();
 
-    return view('public.index', compact('media','subcategorias', 'url_env', 'popups', 'banners', 'blogs', 'categoriasAll', 'productosPupulares', 'ultimosProductos', 'productos', 'destacados', 'descuentos', 'general', 'benefit', 'faqs', 'testimonie', 'slider', 'categorias', 'categoriasindex', 'logos', 'logosdestacados'));
+    return view('public.index', compact('media', 'subcategorias', 'url_env', 'popups', 'banners', 'blogs', 'categoriasAll', 'productosPupulares', 'ultimosProductos', 'productos', 'destacados', 'descuentos', 'general', 'benefit', 'faqs', 'testimonie', 'slider', 'categorias', 'categoriasindex', 'logos', 'logosdestacados'));
   }
 
   public function catalogo(Request $request, string $id_cat = null)
@@ -136,7 +136,7 @@ class IndexController extends Controller
 
     $colores = Products::select('color')->distinct()->pluck('color');
 
-    $sizes = Products::select('peso')->distinct()->orderBy('peso','asc')->pluck('peso');
+    $sizes = Products::select('peso')->distinct()->orderBy('peso', 'asc')->pluck('peso');
 
     $media = $this->instagramService->getUserMedia();
 
@@ -331,7 +331,7 @@ class IndexController extends Controller
     $addresses = [];
     $historicoCupones = [];
     $hasDefaultAddress = false;
-    
+
     if (Auth::check()) {
 
       $usuario = Auth::user()->id;
@@ -350,17 +350,17 @@ class IndexController extends Controller
       $historicoCupones = HistoricoCupon::with('cupon')->where('user_id', $usuario)->where('usado', false)->get();
     }
 
-    
+
     $destacados = Products::where('destacar', '=', 1)->where('status', '=', 1)
       ->where('visible', '=', 1)->with('tags')->activeDestacado()->get();
     $categorias = Category::all();
     $url_env = env('APP_URL');
-    return view('public.checkout_carrito', compact('user','historicoCupones','url_env', 'categorias', 'destacados', 'districts', 'provinces', 'departments', 'addresses', 'hasDefaultAddress'));
+    return view('public.checkout_carrito', compact('user', 'historicoCupones', 'url_env', 'categorias', 'destacados', 'districts', 'provinces', 'departments', 'addresses', 'hasDefaultAddress'));
   }
 
   public function pago(Request $request, string $code)
   {
-    
+
     $sale = Sale::where('code', $code)->first();
     if (!$sale) return \redirect()->route('index');
 
@@ -443,7 +443,7 @@ class IndexController extends Controller
     }
 
     $formToken = IzipayController::token($sale);
- 
+
     return view('public.checkout_pago', compact('user', 'historicoCupones', 'sale', 'url_env', 'districts', 'provinces', 'departments', 'detalleUsuario', 'categorias', 'destacados', 'culqi_public_key', 'addresses', 'hasDefaultAddress', 'formToken'));
   }
 
@@ -579,14 +579,14 @@ class IndexController extends Controller
 
     $body = $request->all();
     $answer = JSON::parse($body['kr-answer']);
-   
+
     $user = Auth::user();
 
     $usuario = null;
     if (Auth::check()) {
       $usuario = Auth::user()->id;
     }
-    
+
 
     $saleJpa = Sale::where('code', $answer['orderDetails']['orderId'])->first();
 
@@ -601,10 +601,10 @@ class IndexController extends Controller
 
     if ($usuario && $saleJpa->idcupon && $saleJpa->idcupon != 0 && $saleJpa->idcupon !== null) {
       $updated = DB::table('historico_cupones')
-          ->where('cupones_id', $saleJpa->idcupon)
-          ->where('user_id', $usuario)
-          ->update(['usado' => true]);
-    }  
+        ->where('cupones_id', $saleJpa->idcupon)
+        ->where('user_id', $usuario)
+        ->update(['usado' => true]);
+    }
 
     $saleJpa->status_id = 3;
     $saleJpa->status_message = 'Pagado correctamente';
@@ -653,7 +653,7 @@ class IndexController extends Controller
     $phone = $request->phone;
     $user = User::findOrFail($request->id);
 
-    
+
 
     if ($request->password !== null || $request->newpassword !== null || $request->confirmnewpassword !== null) {
       if (!Hash::check($request->password, $user->password)) {
@@ -688,7 +688,7 @@ class IndexController extends Controller
     $user = Auth::user();
     $categorias = Category::all();
     $cuponesUsados = HistoricoCupon::where('user_id', $user->id)->where('usado', 1)->pluck('cupones_id');
-    return view('public.dashboard', compact('cuponesUsados','user', 'categorias'));
+    return view('public.dashboard', compact('cuponesUsados', 'user', 'categorias'));
   }
 
 
@@ -726,16 +726,16 @@ class IndexController extends Controller
     $resultados = Products::select('products.*')
       ->where('products.visible', 1)
       ->where('producto', 'like', "%$query%")
-      ->whereIn('products.id', function($subquery) {
+      ->whereIn('products.id', function ($subquery) {
         $subquery->select(DB::raw('MIN(id)'))
-                 ->from('products')
-                 ->where('products.visible', 1)
-                 ->groupBy('producto');
+          ->from('products')
+          ->where('products.visible', 1)
+          ->groupBy('producto');
       })
       ->join('categories', 'categories.id', 'products.categoria_id')
       ->where('categories.visible', 1)
       ->get();
-      
+
     return response()->json($resultados);
   }
 
@@ -794,9 +794,8 @@ class IndexController extends Controller
     return view('public.404');
   }
 
-  public function producto(string $id)
+  public function producto(string $slug)
   {
-
 
     $is_reseller = false;
     if (Auth::check()) {
@@ -806,7 +805,11 @@ class IndexController extends Controller
 
     // $productos = Products::where('id', '=', $id)->first();
     // $especificaciones = Specifications::where('product_id', '=', $id)->get();
-    $product = Products::with(['discount'])->findOrFail($id);
+
+    $product = Products::with(['discount'])->where('slug', $slug)->firstOrFail();
+    $id = $product->id;
+
+    // $product = Products::with(['discount'])->findOrFail($id);
     $especificaciones = Specifications::where('product_id', '=', $id)
       ->where(function ($query) {
         $query->whereNotNull('tittle')
@@ -829,10 +832,10 @@ class IndexController extends Controller
       ->with('colors')
       ->with('marcas')
       ->where('id', '<>', $id)
-      ->whereIn('products.id', function($subquery) {
+      ->whereIn('products.id', function ($subquery) {
         $subquery->select(DB::raw('MIN(id)'))
-                 ->from('products')
-                 ->groupBy('producto');
+          ->from('products')
+          ->groupBy('producto');
       })
       ->where('categoria_id', '=', $product->categoria_id)
       ->where('status', '=', true)
