@@ -13,8 +13,6 @@
 <div id="gridContainer"></div>
 
 <script>
-  
- 
   const salesDataGrid = $('#gridContainer').dxDataGrid({
     language: "es",
     dataSource: {
@@ -60,9 +58,9 @@
     // filterPanel: {
     //   visible: true
     // },
-    // searchPanel: {
-    //   visible: true
-    // },
+    searchPanel: {
+      visible: true
+    },
     // headerFilter: {
     //   visible: true,
     //   search: {
@@ -113,7 +111,7 @@
     //   }
     // },
     columns: [{
-        dataField: 'created_at',
+        dataField: 'code',
         caption: 'ORDEN',
         cellTemplate: (container, {
           data
@@ -152,6 +150,22 @@
           div.append(addressContainer)
           div.append(dateContainer)
 
+          container.html(div)
+        }
+      },
+      {
+        dataField: 'created_at',
+        caption: 'Fecha',
+        cellTemplate: (container, {
+          data
+        }) => {
+          container.addClass('!px-3 !py-2')
+          const div = $('<div>')
+          const dateContainer = $('<p>', {
+            class: 'text-xs text-gray-400',
+            text: moment(data.created_at).format('YYYY-MM-DD HH:mm:ss')
+          })
+          div.append(dateContainer)
           container.html(div)
         }
       },
