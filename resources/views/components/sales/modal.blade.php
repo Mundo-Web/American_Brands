@@ -111,7 +111,7 @@
     const envio = data.address_price
     const idcupon = data.idcupon
     const montocupon = data.cupon_monto ?? 0
-   
+    const nombrecupon = data.cupon?.codigo ?? "sin cupon"
     
 
     $('#invoice-id').val(data.id)
@@ -224,20 +224,24 @@
             `)
         });
 
-        $('#invoice-products').append(`<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
-            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-              Cupon 
-            </th>
-            <td class="px-6 py-4">
-             - S/. ${montocupon}
-            </td>
-            <td class="px-6 py-4">
-              1
-            </td>
-            <td class="px-6 py-4">
-              - S/. ${montocupon}
-            </td>
-          </tr>`)
+        if (montocupon > 0) {
+            $('#invoice-products').append(`
+                <tr class="bg-white text-red-600 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                    <th scope="row" class="text-red-600 px-6 py-4 font-medium  whitespace-nowrap dark:text-white">
+                        Cupón (${nombrecupon}) <i class="fa-solid fa-ticket"></i>
+                    </th>
+                    <td class="px-6 py-4">
+                        - S/. ${montocupon}
+                    </td>
+                    <td class="px-6 py-4">
+                        1
+                    </td>
+                    <td class="px-6 py-4">
+                        - S/. ${montocupon}
+                    </td>
+                </tr>
+            `);
+        }
 
         $('#invoice-products').append(`<tr class="bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
