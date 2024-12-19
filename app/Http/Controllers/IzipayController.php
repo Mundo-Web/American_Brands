@@ -21,24 +21,35 @@ class IzipayController extends Controller
 
         $totalAmount = $sale->total + $sale->address_price;
        
-        $res = new Fetch($url, [
-            'method' => 'POST',
-            'headers' => [
-                'Authorization' => 'Basic ' . $auth,
-                'Content-Type' => 'application/json',
-            ],
-            'body' => [
-                'amount' => $totalAmount * 100,
-                'currency' => 'PEN',
-                'orderId' => $sale->code,
-                'customer' => [
-                    'email' => $sale->email,
-                ],
-            ]
-        ]);
+        $attempts = 0;
+        $maxAttempts = 3;
+        $data = null;
 
-        $data = $res->json();
-       
-        return $data['answer']['formToken'];
+        while ($attempts < $maxAttempts) {
+            $res = new Fetch($url, [
+                'method' => 'POST',
+                'headers' => [
+                    'Authorization' => 'Basic ' . $auth,
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => [
+                    'amount' => $totalAmount * 100,
+                    'currency' => 'PEN',
+                    'orderId' => $sale->code,
+                    'customer' => [
+                        'email' => $sale->email,
+                    ],
+                ]
+            ]);
+
+            if ($res->ok) {
+                $data = $res->json();
+                break; // Salir del bucle si la respuesta es ok
+            }
+
+            $attempts++;
+        }
+
+        return $data ? $data['answer']['formToken'] : null; // Retornar null si no se obtuvo un token
     }
 }
