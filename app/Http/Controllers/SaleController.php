@@ -29,9 +29,10 @@ class SaleController extends Controller
 
     public function index(Request $request)
     {
-        $statuses = Status::all();
-        return view('pages.pedidos.index')
-            ->with('statuses', $statuses);
+        $statuses = Status::with('sales')->get();
+        $cupones = Cupon::all();
+
+        return view('pages.pedidos.index', compact('statuses', 'cupones'));
     }
 
     public function save(Request $request)

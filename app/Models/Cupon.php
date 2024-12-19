@@ -33,4 +33,9 @@ class Cupon extends Model
     {
         return $this->hasMany(HistoricoCupon::class, 'cupones_id');
     }
+
+    public function sales()
+    {
+        return $this->hasMany(Sale::class, 'id');
+    }
 }

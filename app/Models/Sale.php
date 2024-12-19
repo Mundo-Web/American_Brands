@@ -28,11 +28,19 @@ class Sale extends Model
         'doc_number',
         'razon_fact',
         'status_id',
-        'direccion_fact'
+        'direccion_fact',
+        'idcupon',
+        'cupon_monto',
+        'subtotal'
     ];
 
     public function status()
     {
         return $this->belongsTo(Status::class, 'status_id');
+    }
+
+    public function cupon()
+    {
+        return $this->belongsTo(Cupon::class, 'idcupon');
     }
 }

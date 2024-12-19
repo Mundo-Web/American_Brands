@@ -21,4 +21,5 @@ class Status extends Model
     {
         return $this->hasMany(Sale::class, 'status_id');
     }
+    
 }
