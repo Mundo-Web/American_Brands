@@ -17,7 +17,7 @@
     language: "es",
     dataSource: {
       load: async (params) => {
-        const estado = document.getElementById("estado").value;
+        const estado = document.getElementById("estado")?.value;
         const res = await fetch("{{ route('sales.paginate') }}{{ !$isAdmin ? '?data=mine' : '' }}", {
           method: 'POST',
           headers: {
