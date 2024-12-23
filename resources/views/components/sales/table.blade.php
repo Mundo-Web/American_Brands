@@ -113,6 +113,7 @@
     columns: [{
         dataField: 'code',
         caption: 'ORDEN',
+        width: '400px',
         cellTemplate: (container, {
           data
         }) => {
