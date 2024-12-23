@@ -578,7 +578,18 @@ class IndexController extends Controller
   {
 
     $body = $request->all();
-    $answer = JSON::parse($body['kr-answer']);
+    
+    if (!isset($body['kr-answer'])) {
+      return redirect()->route('index')->withErrors('Datos de la transacción no válidos.');
+    }
+    
+    try {
+      //$answer = json_decode($body['kr-answer'], true);
+      $answer = JSON::parse($body['kr-answer']);
+    } catch (\Exception $e) {
+        return redirect()->route('index')->withErrors('Respuesta de pago no válida.');
+    }
+   
 
     $user = Auth::user();
 
@@ -599,8 +610,8 @@ class IndexController extends Controller
       return \redirect()->route('index');
     }
 
-    if ($usuario && $saleJpa->idcupon && $saleJpa->idcupon != 0 && $saleJpa->idcupon !== null) {
-      $updated = DB::table('historico_cupones')
+    if ($usuario && $saleJpa->idcupon) {
+        DB::table('historico_cupones')
         ->where('cupones_id', $saleJpa->idcupon)
         ->where('user_id', $usuario)
         ->update(['usado' => true]);
