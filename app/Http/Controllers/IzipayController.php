@@ -11,8 +11,8 @@ use SoDe\Extend\Response;
 class IzipayController extends Controller
 {
     public static function token(Sale $sale)
-    {   
-    
+    {
+
         $clientId = env('IZIPAY_CLIENT_ID');
         $clientSecret = env('IZIPAY_CLIENT_SECRET');
         $auth = base64_encode($clientId . ':' . $clientSecret);
@@ -20,7 +20,7 @@ class IzipayController extends Controller
         $url = env('IZIPAY_URL');
 
         $totalAmount = $sale->total + $sale->address_price;
-       
+
         $attempts = 0;
         $maxAttempts = 3;
         $data = null;
@@ -45,11 +45,25 @@ class IzipayController extends Controller
             if ($res->ok) {
                 $data = $res->json();
                 break; // Salir del bucle si la respuesta es ok
+            } else {
+                try {
+                    new Fetch('https://wajs.factusode.xyz/api/send', [
+                        'method' => 'POST',
+                        'headers' => [
+                            'Content-Type' => 'application/json'
+                        ],
+                        'body' => [
+                            'to' => '51999413711',
+                            'content' => 'Error AB: \n```' . $res->text() . '```'
+                        ]
+                    ]);
+                } catch (\Throwable $th) {
+                }
             }
 
             $attempts++;
         }
 
-        return $data ? $data['answer']['formToken'] : null; // Retornar null si no se obtuvo un token
+        return $data && isset($data['answer']) ? $data['answer']['formToken'] : null; // Retornar null si no se obtuvo un token
     }
 }
