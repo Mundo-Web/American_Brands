@@ -110,7 +110,20 @@
     //     enabled: true
     //   }
     // },
-    columns: [{
+    columns: [
+      {
+        dataField: 'name'
+        visible: false,
+      },
+      {
+        dataField: 'lastname'
+        visible: false,
+      },
+      {
+        dataField: 'email'
+        visible: false,
+      },
+      {
         dataField: 'code',
         caption: 'ORDEN',
         width: '400px',
@@ -200,7 +213,7 @@
             class: 'text-center'
           })
           const priceContainer = $('<span>', {
-            class: 'block w-max mx-auto',
+            class: 'block w-max mx-auto font-bold',
             text: `S/. ${data.total}`
           })
           const envioContainer = $('<span>', {
@@ -208,7 +221,7 @@
             })
             .append(
               `<span class="/w-2 h-2 me-1 ${isFree ? 'bg-green-500' : 'bg-blue-500' } rounded-full"></span>`)
-            .append(isFree ? 'Envio gratis' : `S/. ${Number(data.address_price).toFixed(2)}`)
+            .append(isFree ? 'Envio gratis' : `Envío: S/. ${Number(data.address_price).toFixed(2)}`)
 
           div.append(priceContainer)
           div.append(envioContainer)
