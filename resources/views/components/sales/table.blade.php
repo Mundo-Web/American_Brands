@@ -160,9 +160,15 @@
             class: 'text-xs text-gray-400',
             text: moment(data.created_at).format('YYYY-MM-DD HH:mm:ss')
           }).prepend(isAdmin ? `<span class="me-1 text-gray-800">${data.name} ${data.lastname}</span>` : '')
+
+          const emailContainer = $('<p>', {
+            class: 'text-sm text-blue-500',
+            text: data.email
+          })
           div.append(orderContainer)
           div.append(addressContainer)
           div.append(dateContainer)
+          div.append(emailContainer)
 
           container.html(div)
         }
