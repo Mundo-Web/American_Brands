@@ -175,7 +175,7 @@
           if (isAdmin) div.append(nameContainer)
           div.append(addressContainer)
           div.append(dateContainer)
-          div.append(emailContainer)
+          if (isAdmin) div.append(emailContainer)
 
           container.html(div)
         }
