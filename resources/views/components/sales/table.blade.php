@@ -173,9 +173,9 @@
           })
           div.append(orderContainer)
           if (isAdmin) div.append(nameContainer)
+          if (isAdmin) div.append(emailContainer)
           div.append(addressContainer)
           div.append(dateContainer)
-          if (isAdmin) div.append(emailContainer)
 
           container.html(div)
         }
