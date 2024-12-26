@@ -233,7 +233,7 @@
               class: `inline-flex items-center ${ isFree ? 'bg-green-100' : 'bg-blue-100'} ${ isFree ? 'text-green-800' : 'text-blue-800'} text-xs font-medium px-2.5 py-0.5 rounded-full dark:${ isFree ? 'bg-green-900' : 'bg-blue-900'} dark:${ isFree ? 'text-green-300' : 'text-blue-300'} w-max`
             })
             .append(
-              `<span class="/w-2 h-2 me-1 ${isFree ? 'bg-green-500' : 'bg-blue-500' } rounded-full"></span>`)
+              `<span class="w-2 h-2 me-1 ${isFree ? 'bg-green-500' : 'bg-blue-500' } rounded-full"></span>`)
             .append(isFree ? 'Envio gratis' : `Envío: S/. ${Number(data.address_price).toFixed(2)}`)
 
           div.append(priceContainer)
