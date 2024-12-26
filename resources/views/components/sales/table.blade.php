@@ -112,15 +112,15 @@
     // },
     columns: [
       {
-        dataField: 'name'
+        dataField: 'name',
         visible: false,
       },
       {
-        dataField: 'lastname'
+        dataField: 'lastname',
         visible: false,
       },
       {
-        dataField: 'email'
+        dataField: 'email',
         visible: false,
       },
       {
