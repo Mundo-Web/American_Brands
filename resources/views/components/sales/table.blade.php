@@ -213,7 +213,7 @@
             class: 'text-center'
           })
           const priceContainer = $('<span>', {
-            class: 'block w-max mx-auto font-bold',
+            class: 'block w-max mx-auto font-bold mt-1',
             text: `S/. ${data.total}`
           })
           const envioContainer = $('<span>', {
