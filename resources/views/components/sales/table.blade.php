@@ -149,6 +149,11 @@
           tippy('[tippy]', {
             arrow: true
           })
+
+          const nameContainer = $('<p>', {
+            text: `${data.name} ${data.lastname}`
+          });
+
           orderContainer.on('click', () => openSaleModal(data))
           const addressContainer = $('<p>', {
             class: 'text-sm text-gray-500 dark:text-gray-400',
@@ -159,13 +164,14 @@
           const dateContainer = $('<p>', {
             class: 'text-xs text-gray-400',
             text: moment(data.created_at).format('YYYY-MM-DD HH:mm:ss')
-          }).prepend(isAdmin ? `<span class="me-1 text-gray-800">${data.name} ${data.lastname}</span>` : '')
+          })
 
           const emailContainer = $('<p>', {
             class: 'text-sm text-blue-500',
             text: data.email
           })
           div.append(orderContainer)
+          if (isAdmin) div.append(nameContainer)
           div.append(addressContainer)
           div.append(dateContainer)
           div.append(emailContainer)
