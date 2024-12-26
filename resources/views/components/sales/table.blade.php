@@ -151,6 +151,7 @@
           })
 
           const nameContainer = $('<p>', {
+            class: 'font-bold',
             text: `${data.name} ${data.lastname}`
           });
 
