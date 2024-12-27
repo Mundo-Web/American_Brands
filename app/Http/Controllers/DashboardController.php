@@ -50,12 +50,13 @@ class DashboardController extends Controller
             DB::raw('SUM(total) AS total')
         ])
             ->whereMonth('created_at', now()->month)
+            ->whereIn('status_id', [3, 4, 5])
             ->groupBy('day')
             ->orderBy('day', 'asc')
             ->get();
 
-        $pendingSales = Sale::where('confirmation_user', false)->count();
-        $servedSales = Sale::where('confirmation_user', true)->count();
+        $pendingSales = Sale::where('status_id', 3)->count();
+        $servedSales = Sale::whereIn('status_id', [4, 5])->count();
 
         $topProducts = SaleDetail::select([
             'sale_details.product_image AS image',
