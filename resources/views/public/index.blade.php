@@ -377,10 +377,10 @@
 
 
 
-        <section class="w-full px-[5%] relative mx-auto pt-12 lg:pt-16">
+        {{-- <section class="w-full px-[5%] relative mx-auto pt-12 lg:pt-16">
               <h2 class="text-center font-Urbanist_Black text-2xl lg:text-3xl text-black">FOLLOW US <span class="font-Urbanist_Regular"> ON </span> 
               <span class="font-Urbanist_Regular italic"> @americanbrandspe </span></h2>
-        </section>
+        </section> --}}
 
         {{-- <section class="w-full relative mx-auto pt-12 lg:pt-16">
             <div class="swiper instagram h-max">
