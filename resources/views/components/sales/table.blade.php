@@ -110,7 +110,20 @@
     //     enabled: true
     //   }
     // },
-    columns: [{
+    columns: [
+      {
+        dataField: 'name',
+        visible: false,
+      },
+      {
+        dataField: 'lastname',
+        visible: false,
+      },
+      {
+        dataField: 'email',
+        visible: false,
+      },
+      {
         dataField: 'code',
         caption: 'ORDEN',
         width: '400px',
@@ -136,6 +149,12 @@
           tippy('[tippy]', {
             arrow: true
           })
+
+          const nameContainer = $('<p>', {
+            class: 'font-bold',
+            text: `${data.name} ${data.lastname}`
+          });
+
           orderContainer.on('click', () => openSaleModal(data))
           const addressContainer = $('<p>', {
             class: 'text-sm text-gray-500 dark:text-gray-400',
@@ -146,8 +165,15 @@
           const dateContainer = $('<p>', {
             class: 'text-xs text-gray-400',
             text: moment(data.created_at).format('YYYY-MM-DD HH:mm:ss')
-          }).prepend(isAdmin ? `<span class="me-1 text-gray-800">${data.name} ${data.lastname}</span>` : '')
+          })
+
+          const emailContainer = $('<p>', {
+            class: 'text-sm text-blue-500',
+            text: data.email
+          })
           div.append(orderContainer)
+          if (isAdmin) div.append(nameContainer)
+          if (isAdmin) div.append(emailContainer)
           div.append(addressContainer)
           div.append(dateContainer)
 
@@ -200,15 +226,15 @@
             class: 'text-center'
           })
           const priceContainer = $('<span>', {
-            class: 'block w-max mx-auto',
+            class: 'block w-max mx-auto font-bold mt-1',
             text: `S/. ${data.total}`
           })
           const envioContainer = $('<span>', {
               class: `inline-flex items-center ${ isFree ? 'bg-green-100' : 'bg-blue-100'} ${ isFree ? 'text-green-800' : 'text-blue-800'} text-xs font-medium px-2.5 py-0.5 rounded-full dark:${ isFree ? 'bg-green-900' : 'bg-blue-900'} dark:${ isFree ? 'text-green-300' : 'text-blue-300'} w-max`
             })
             .append(
-              `<span class="/w-2 h-2 me-1 ${isFree ? 'bg-green-500' : 'bg-blue-500' } rounded-full"></span>`)
-            .append(isFree ? 'Envio gratis' : `S/. ${Number(data.address_price).toFixed(2)}`)
+              `<span class="w-2 h-2 me-1 ${isFree ? 'bg-green-500' : 'bg-blue-500' } rounded-full"></span>`)
+            .append(isFree ? 'Envio gratis' : `Envío: S/. ${Number(data.address_price).toFixed(2)}`)
 
           div.append(priceContainer)
           div.append(envioContainer)
