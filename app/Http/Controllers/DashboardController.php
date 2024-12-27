@@ -47,7 +47,7 @@ class DashboardController extends Controller
         $salesPerDay = Sale::select([
             DB::raw('DATE_FORMAT(created_at, "%Y-%m-%d") AS day'),
             DB::raw('COUNT(id) AS quantity'),
-            DB::raw('SUM(total + addres_price) AS total')
+            DB::raw('SUM(total + address_price) AS total')
         ])
             ->whereMonth('created_at', now()->month)
             ->whereIn('status_id', [3, 4, 5])
