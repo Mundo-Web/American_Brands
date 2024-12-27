@@ -343,7 +343,7 @@
               <h2 class="text-center font-Urbanist_Black text-2xl lg:text-3xl text-black">COMPLEMENTA TU ESTILO</h2>
         </section>
             
-         <section class="w-full px-[5%] relative mx-auto pt-12 lg:pt-16">
+         <section class="w-full px-[5%] relative mx-auto py-12 lg:py-16">
             <div class="swiper complementos h-max">
                 <div class="swiper-wrapper">
                   @foreach ($destacados as $productosd)       
