@@ -107,6 +107,7 @@ class DashboardController extends Controller
             DB::raw('SUM(quantity * price) AS total_price')
         ])
             ->join('sales', 'sale_details.sale_id', '=', 'sales.id')
+            ->whereIn('sales.status_id', [3, 4, 5])
             ->groupBy('product_name', 'product_image', 'product_color')
             ->orderBy($orderBy, 'desc')
             ->limit(10)
