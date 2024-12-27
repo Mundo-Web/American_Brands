@@ -339,10 +339,10 @@ const Catalogo = ({ minPrice, maxPrice, categories, tags, attribute_values, id_c
 
     </form>
     
-      <section className="w-full px-[5%] relative mx-auto pt-12 lg:pt-16">
+      {/* <section className="w-full px-[5%] relative mx-auto pt-12 lg:pt-16">
                 <h2 className="text-center font-Urbanist_Black text-2xl lg:text-3xl text-black">FOLLOW US <span class="font-Urbanist_Regular"> ON </span> 
                 <span className="font-Urbanist_Regular italic"> @americanbrandspe </span></h2>
-      </section>
+      </section> */}
       
       <section className="w-full relative mx-auto pt-12 lg:pt-16">
         <Swiper

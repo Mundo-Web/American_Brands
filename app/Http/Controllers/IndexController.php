@@ -599,8 +599,8 @@ class IndexController extends Controller
       return \redirect()->route('index');
     }
 
-    if ($usuario && $saleJpa->idcupon && $saleJpa->idcupon != 0 && $saleJpa->idcupon !== null) {
-      $updated = DB::table('historico_cupones')
+    if ($usuario && $saleJpa->idcupon  ) {
+        DB::table('historico_cupones')
         ->where('cupones_id', $saleJpa->idcupon)
         ->where('user_id', $usuario)
         ->update(['usado' => true]);

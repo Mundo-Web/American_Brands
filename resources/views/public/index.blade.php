@@ -343,7 +343,7 @@
               <h2 class="text-center font-Urbanist_Black text-2xl lg:text-3xl text-black">COMPLEMENTA TU ESTILO</h2>
         </section>
             
-         <section class="w-full px-[5%] relative mx-auto pt-12 lg:pt-16">
+         <section class="w-full px-[5%] relative mx-auto py-12 lg:py-16">
             <div class="swiper complementos h-max">
                 <div class="swiper-wrapper">
                   @foreach ($destacados as $productosd)       
@@ -377,16 +377,15 @@
 
 
 
-        <section class="w-full px-[5%] relative mx-auto pt-12 lg:pt-16">
+        {{-- <section class="w-full px-[5%] relative mx-auto pt-12 lg:pt-16">
               <h2 class="text-center font-Urbanist_Black text-2xl lg:text-3xl text-black">FOLLOW US <span class="font-Urbanist_Regular"> ON </span> 
               <span class="font-Urbanist_Regular italic"> @americanbrandspe </span></h2>
-        </section>
+        </section> --}}
 
-        <section class="w-full relative mx-auto pt-12 lg:pt-16">
+        {{-- <section class="w-full relative mx-auto pt-12 lg:pt-16">
             <div class="swiper instagram h-max">
-                <div class="swiper-wrapper">
-                    @php
-                        // Filtrar los elementos para incluir solo IMAGE o CAROUSEL_ALBUM
+                <div class="swiper-wrapper"> --}}
+                    {{-- @php
                         $filteredMedia = array_filter($media, function ($item) {
                             return $item['media_type'] === 'IMAGE' || $item['media_type'] === 'CAROUSEL_ALBUM';
                         });
@@ -400,7 +399,7 @@
                                 </a>
                             </div>
                         </div>
-                    @endforeach    
+                    @endforeach     --}}
                     {{-- @foreach (array_slice($media, 0, 12) as $item)
                         <div class="swiper-slide">
                             <div class="relative group aspect-square h-full">
@@ -429,9 +428,9 @@
                             </div>
                         </div>
                     @endforeach --}}
-                </div>
+                {{-- </div>
             </div>
-        </section>
+        </section> --}}
 
 
         {{-- <section class="w-full relative mx-auto pt-12 lg:pt-16">
