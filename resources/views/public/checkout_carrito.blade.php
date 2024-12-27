@@ -51,7 +51,8 @@
               <label for="email" class="font-medium text-[13px] text-[#6C7275]">E-mail <span
                   class="text-[#c1272d]">*</span></label>
               <input id="email" type="email" placeholder="Correo electrónico" 
-                name="email" value="{{ auth()->check() ? auth()->user()->email : '' }}"
+                name="email" value=""
+                {{-- value="{{ auth()->check() ? auth()->user()->email : '' }}" --}}
                 class="w-full py-3 px-4 focus:outline-none focus:ring-[#c1272d] focus:border-[#c1272d] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
                 required>
             </div>
