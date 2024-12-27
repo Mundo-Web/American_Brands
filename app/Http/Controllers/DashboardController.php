@@ -17,12 +17,14 @@ class DashboardController extends Controller
         $endDate = Carbon::now()->endOfMonth()->format('Y-m-d H:i:s');
         $sales = Sale::select([
             DB::raw('COUNT(id) AS quantity'),
-            DB::raw('SUM(total) AS total'),
+            DB::raw('SUM(total + address_price) AS total'),
             DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS month')
         ])
             ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereIn('status_id', [3, 4, 5])
             ->groupBy('month')
             ->orderBy('month', 'desc')
+            ->limit(2)
             ->get();
 
         $salesThisMonth = $sales->get(0) ?? json_decode('{"month": null, "total": 0, "quantity": 0}');
