@@ -1204,6 +1204,7 @@ categorias.forEach(categoria => {
                 let {
                     producto,
                     id,
+                    sku,
                     descuento,
                     precio,
                     imagen,
@@ -1213,6 +1214,8 @@ categorias.forEach(categoria => {
                     discount_id,
                     discount
                 } = success.data
+
+                console.log(sku)
 
                 let is_reseller = success.is_reseller
 
@@ -1246,6 +1249,7 @@ categorias.forEach(categoria => {
 
                 let detalleProducto = {
                     id,
+                    sku,
                     producto,
                     isCombo: false,
                     descuento,

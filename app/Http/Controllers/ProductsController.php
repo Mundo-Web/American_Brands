@@ -739,10 +739,10 @@ class ProductsController extends Controller
 
   public static function process(array $cart = [])
   {
-    $ids = array_map(fn($item) => $item['id'], $cart);
+    $ids = array_map(fn($item) => $item['sku'], $cart);
 
     $productsJpa = Products::with(['discount'])
-      ->whereIn('id', $ids)
+      ->whereIn('sku', $ids)
       ->get();
 
     $cartSameDiscount = [];
