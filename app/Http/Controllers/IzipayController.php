@@ -6,6 +6,7 @@ use App\Models\Sale;
 use Illuminate\Http\Request;
 use SoDe\Extend\Crypto;
 use SoDe\Extend\Fetch;
+use SoDe\Extend\Math;
 use SoDe\Extend\Response;
 
 class IzipayController extends Controller
@@ -33,7 +34,7 @@ class IzipayController extends Controller
                     'Content-Type' => 'application/json',
                 ],
                 'body' => [
-                    'amount' => $totalAmount * 100,
+                    'amount' => Math::round($totalAmount * 100),
                     'currency' => 'PEN',
                     'orderId' => $sale->code,
                     'customer' => [
