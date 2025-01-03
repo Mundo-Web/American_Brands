@@ -61,24 +61,31 @@ class SaveItems implements ShouldQueue
       $spCount = Specifications::count();
       $glCount = Galerie::count();
       $prCount = Products::count();
+      $tgCount = Tag::count();
       dump("Specifications: {$spCount}
       Galerie: {$glCount}
-      Productos: {$prCount}");
+      Productos: {$prCount}
+      Tags: {$tgCount}");
 
       Specifications::whereNotNull('id')->delete();
       Galerie::whereNotNull('id')->delete();
       Products::whereNotNull('id')->delete();
+      Tag::whereNotNull('id')->delete();
 
       $spCount = Specifications::count();
       $glCount = Galerie::count();
       $prCount = Products::count();
+      $tgCount = Tag::count();
+
       dump("Specifications: {$spCount}
       Galerie: {$glCount}
-      Productos: {$prCount}");
+      Productos: {$prCount}
+      Tags: {$tgCount}");
 
       DB::statement('ALTER TABLE specifications AUTO_INCREMENT = 1');
       DB::statement('ALTER TABLE galeries AUTO_INCREMENT = 1');
       DB::statement('ALTER TABLE products AUTO_INCREMENT = 1');
+      DB::statement('ALTER TABLE tags AUTO_INCREMENT = 1');
     } catch (\Throwable $th) {
       dump('Error: ' . $th->getMessage());
     }
