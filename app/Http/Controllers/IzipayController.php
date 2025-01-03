@@ -58,12 +58,13 @@ class IzipayController extends Controller
                         ]
                     ]);
                 } catch (\Throwable $th) {
+                    echo($th);
                 }
             }
 
             $attempts++;
         }
 
-        return $data && isset($data['answer']) ? $data['answer']['formToken'] : null; // Retornar null si no se obtuvo un token
+        return $data && isset($data['answer']) && isset($data['answer']['formToken']) ? $data['answer']['formToken'] : null; // Retornar null si no se obtuvo un token
     }
 }
