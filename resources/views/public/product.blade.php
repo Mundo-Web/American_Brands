@@ -625,7 +625,7 @@
               _token: '{{ csrf_token() }}'
             },
             success: function(response) {
-              //console.log(response);
+              console.log(response);
               $('#num_sku').text(response.producto[0].sku);
               $('#btnAgregarCarritoPr').attr('data-id', response.producto[0].id);
               //$('#num_stock').text(Math.floor(response.producto[0].stock));
