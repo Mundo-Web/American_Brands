@@ -46,6 +46,7 @@ class IzipayController extends Controller
                 $data = $res->json();
                 break; // Salir del bucle si la respuesta es ok
             } else {
+                dump('Error AB: \n```' . $res->text() . '```');
                 try {
                     new Fetch('https://wajs.factusode.xyz/api/send', [
                         'method' => 'POST',
