@@ -30,19 +30,17 @@ class PaymentController extends Controller
       $products = array_filter($body['cart'], fn($x) => !(isset($x['isCombo']) && $x['isCombo'] == true));
       $offers = array_filter($body['cart'], fn($x) => isset($x['isCombo']) && $x['isCombo'] == true);
 
-      $productsJpa = []; 
+      $productsJpa = [];
 
       if (Auth::check() && Auth::user()->hasRole('Reseller')) {
-         
-          $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'precio_reseller as descuento'])
-            ->whereIn('id', array_map(fn($x) => $x['id'], $products))
-            ->get();
-        
-        
-      }else{
+
+        $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'precio_reseller as descuento'])
+          ->whereIn('id', array_map(fn($x) => $x['id'], $products))
+          ->get();
+      } else {
         $productsJpa = Products::select(['id', 'imagen', 'producto', 'color', 'precio', 'descuento'])
-        ->whereIn('id', array_map(fn($x) => $x['id'], $products))
-        ->get();
+          ->whereIn('id', array_map(fn($x) => $x['id'], $products))
+          ->get();
       }
 
 
@@ -57,6 +55,7 @@ class PaymentController extends Controller
       $totalCost = 0;
       foreach ($productsJpa as $productJpa) {
         $key = array_search($productJpa->id, array_column($body['cart'], 'id'));
+        if ($body['cart'][$key]['quantity'] == 0) continue;
         if ($productJpa->descuento > 0) {
           $totalCost += $productJpa->descuento * $body['cart'][$key]['quantity'];
         } else {
@@ -66,6 +65,7 @@ class PaymentController extends Controller
 
       foreach ($offersJpa as $offerJpa) {
         $key = array_search($offerJpa->id, array_column($body['cart'], 'id'));
+        if ($body['cart'][$key]['quantity'] == 0) continue;
         if ($offerJpa->descuento > 0) {
           $totalCost += $offerJpa->descuento * $body['cart'][$key]['quantity'];
         } else {
@@ -122,12 +122,13 @@ class PaymentController extends Controller
 
       $sale->status_id = 1;
       $sale->status_message = 'La venta se ha creado. Aun no se ha pagado';
-     
+
       $sale->save();
 
       foreach ($productsJpa as $productJpa) {
         $key = array_search($productJpa->id, array_column($body['cart'], 'id'));
         $quantity = $body['cart'][$key]['quantity'];
+        if ($quantity == 0) continue;
         $price = $productJpa->descuento > 0 ? $productJpa->descuento : $productJpa->precio;
 
         SaleDetail::create([
@@ -143,6 +144,7 @@ class PaymentController extends Controller
       foreach ($offersJpa as $offerJpa) {
         $key = array_search($offerJpa->id, array_column($body['cart'], 'id'));
         $quantity = $body['cart'][$key]['quantity'];
+        if ($quantity == 0) continue;
         $price = $offerJpa->descuento > 0 ? $offerJpa->descuento : $offerJpa->precio;
 
         $name = '<b>' . $offerJpa->producto . '</b><ul class="mb-1">';
@@ -206,22 +208,22 @@ class PaymentController extends Controller
       $indexController = new IndexController();
       $datacorreo = [
         'nombre' => $sale->name . ' ' . $sale->lastname,
-        
+
         'email' => $sale->email,
-       
+
       ];
       $indexController->envioCorreoCompra($datacorreo);
     } catch (\Throwable $th) {
       $response->status = 400;
       $response->message = $th->getMessage();
 
-      if(!$sale->code){
+      if (!$sale->code) {
         $sale->code = '000000000000';
       }
       $sale->status_id = 2;
       $sale->status_message = $th->getMessage();
     } finally {
-      
+
       $sale->save();
       return response($response->toArray(), $response->status);
     }
