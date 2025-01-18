@@ -134,7 +134,7 @@ class ProductsController extends Controller
 
       $totalCount = 0;
       if ($request->requireTotalCount) {
-        $totalCount = $instance->count('*');
+        $totalCount = $instance->distinct()->count('products.id');
       }
 
       $jpas = [];
