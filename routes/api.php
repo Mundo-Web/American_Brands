@@ -13,6 +13,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CuponController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\IzipayController;
+use Maatwebsite\Excel\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,8 @@ Route::post('signup', [AuthController::class, 'signup']);
 Route::post('/izipay/token', [IzipayController::class, 'token'])->name('izipay.token');
 Route::post('/sales', [SaleController::class, 'save'])->name('sales.save');
 Route::patch('/sales', [SaleController::class, 'updateBilling'])->name('sales.update');
+
+Route::post('/items/stock', [ProductsController::class, 'stock'])->name('items.stock');
 
 Route::middleware(['web', 'auth:sanctum', 'verified'])->group(function () {
 

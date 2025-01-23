@@ -25,6 +25,7 @@ use Inertia\Inertia;
 use SoDe\Extend\JSON;
 use Illuminate\Support\Facades\Auth;
 use Ramsey\Uuid\Type\Integer;
+use SoDe\Extend\Response;
 
 use function PHPUnit\Framework\isNull;
 
@@ -54,11 +55,11 @@ class ProductsController extends Controller
     //validar el rol del usuario logueado 
     // $user = Auth::user();
     // dump($user->hasRole('Reseller'));
-    
+
     $user = false;
     $admin = $request->is_admin ? true : false;
     $outlet = $request->hasTag51;
-    
+
     $response =  new dxResponse();
     try {
       $instance = Products::select([
@@ -72,23 +73,23 @@ class ProductsController extends Controller
         ->leftJoin('client_logos', 'client_logos.id', 'products.marca_id')
         ->where('products.status', 1);
 
-        if (!$admin) {
-          $instance->whereIn('products.id', function($query) {
-            $query->select(DB::raw('MIN(id)'))
-                  ->from('products')
-                  ->where('products.visible', 1)
-                  ->groupBy('producto');
-          })
+      if (!$admin) {
+        $instance->whereIn('products.id', function ($query) {
+          $query->select(DB::raw('MIN(id)'))
+            ->from('products')
+            ->where('products.visible', 1)
+            ->groupBy('producto');
+        })
           ->where('products.visible', 1)
           ->where('categories.visible', 1);
 
-          if($outlet) {
-            $instance->orderBy('products.percent_discount', 'DESC');
-          } else {
-            $instance->orderBy('products.percent_discount', 'ASC');
-          }
-        }   
-        
+        if ($outlet) {
+          $instance->orderBy('products.percent_discount', 'DESC');
+        } else {
+          $instance->orderBy('products.percent_discount', 'ASC');
+        }
+      }
+
 
       if (Auth::check()) {
         $user = Auth::user();
@@ -97,8 +98,8 @@ class ProductsController extends Controller
           $instance->where('products.precio_reseller', '>', 0);
         }
       }
-      
-      
+
+
 
       if ($request->group != null) {
         [$grouping] = $request->group;
@@ -114,7 +115,7 @@ class ProductsController extends Controller
           dxDataGrid::filter($query, $request->filter ?? [], false);
         });
       }
-      
+
 
       if ($request->sort != null) {
         foreach ($request->sort as $sorting) {
@@ -153,7 +154,7 @@ class ProductsController extends Controller
       //   $result = JSON::unflatten($jpa->toArray(), '__');
       //   $results[] = $result;
       // }
-      
+
       $response->status = 200;
       $response->message = 'Operación correcta';
       $response->data = $jpas;
@@ -169,6 +170,21 @@ class ProductsController extends Controller
       );
     }
   }
+
+
+  public function stock(Request $request)
+  {
+    $response = Response::simpleTryCatch(function () use ($request) {
+      $body = $request->all();
+      return Products::select(['id', 'stock'])->whereIn('id', $body)->get()->map(function($item) {
+        $item->stock = \intval($item->stock);
+        return $item;
+      });
+    });
+
+    return response($response->toArray(), $response->status);
+  }
+
   public function paginateOffers(Request $request)
   {
     $response =  new dxResponse();
@@ -528,36 +544,36 @@ class ProductsController extends Controller
   }
 
 
-  public function borrarFichaTecnica(Request $request){
+  public function borrarFichaTecnica(Request $request)
+  {
     try {
-       
-        $obtenerproducto = Products::find($request->id);
 
-        if (!$obtenerproducto) {
-            return response()->json(['message' => 'Producto no encontrado'], 404);
-        }
+      $obtenerproducto = Products::find($request->id);
 
-      
-        $rutaCompleta = $obtenerproducto->imagen_ambiente;
+      if (!$obtenerproducto) {
+        return response()->json(['message' => 'Producto no encontrado'], 404);
+      }
 
-      
-        if (file_exists($rutaCompleta)) {
-            
-            if (unlink($rutaCompleta)) {
-               
-                $obtenerproducto->imagen_ambiente = "";
-                $obtenerproducto->update();
-                
-                return response()->json(['message' => 'Ficha Técnica eliminada con éxito']);
-            } else {
-                return response()->json(['message' => 'No se pudo eliminar el archivo físico'], 500);
-            }
+
+      $rutaCompleta = $obtenerproducto->imagen_ambiente;
+
+
+      if (file_exists($rutaCompleta)) {
+
+        if (unlink($rutaCompleta)) {
+
+          $obtenerproducto->imagen_ambiente = "";
+          $obtenerproducto->update();
+
+          return response()->json(['message' => 'Ficha Técnica eliminada con éxito']);
         } else {
-            return response()->json(['message' => 'El archivo no existe'], 404);
+          return response()->json(['message' => 'No se pudo eliminar el archivo físico'], 500);
         }
-
+      } else {
+        return response()->json(['message' => 'El archivo no existe'], 404);
+      }
     } catch (\Throwable $th) {
-        return response()->json(['message' => 'No se ha podido eliminar la Ficha Técnica', 'error' => $th->getMessage()], 400);
+      return response()->json(['message' => 'No se ha podido eliminar la Ficha Técnica', 'error' => $th->getMessage()], 400);
     }
   }
 

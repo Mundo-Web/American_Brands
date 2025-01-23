@@ -133,34 +133,13 @@
             <img src="{{ asset($product->marcas->url_image) }}"
               onerror="this.onerror=null;this.src='/images/img/noimagen.jpg';" class="w-28 h-auto object-contain" />
           @endif
-
-          {{-- @foreach ($atributos as $item)
-                     @foreach ($valorAtributo as $value)
-                            @if ($value->attribute_id == 1)
-                                  @isset($valoresdeatributo)
-                                      @foreach ($valoresdeatributo as $valorat)
-                                        @if ($valorat->attribute_value_id == $value->id)
-                                          <img src="{{asset($value->imagen)}}" class="w-28 h-auto object-contain"/>
-                                        @endif
-                                      @endforeach
-                                  @endisset
-                            @endif
-                      @endforeach
-                    @endforeach --}}
           <div class="flex flex-col">
             <h3 class="font-Urbanist_Black text-3xl text-[#cccccc]">
-              {{ $product->producto }}: <span class="text-xl"> {{ $product->color }} - {{ $product->peso }}</span></h3>
-            {{-- <p class="font-Inter_Regular text-base gap-2">Disponibilidad:
-                            @if ($product->stock == 0)
-                                <span class="text-[#f6000c]">No hay Stock disponible</span>
-                            @else
-                                <span class="text-[#006BF6]">Quedan {{ round((float) $product->stock) }} en stock</span>
-                            @endif
-                        </p> --}}
-
-            {{-- <div class="w-full bg-gray-200 rounded-full h-1.5 dark:bg-gray-700">
-                            <div class="bg-blue-600 h-1.5 rounded-full" style="width: {{ $stock }}%"></div>
-                        </div> --}}
+              {{ $product->producto }}:
+              <span class="text-xl">
+                {{ $product->color }} - {{ $product->peso }}
+              </span>
+            </h3>
           </div>
 
           <div class="flex flex-col gap-3">
@@ -198,42 +177,11 @@
 
             <div class="flex flex-col gap-5">
               <div class="flex flex-row gap-3">
-                {{-- <div class="flex flex-col w-1/5 justify-start items-start uppercase font-Urbanist_Black">
-                                          <h2>Colores</h2>
-                                    </div>
 
-                                    <div class="flex flex-wrap w-4/5 gap-4">
-                                        <div class="flex justify-center items-center"> 
-                                            <label class="cursor-pointer">
-                                                <input class="hidden" name="color" type="radio" value="red" />
-                                                <div class="bg-red-600 w-7 h-7 rounded-full border-2 border-transparent hover:border-gray-400"></div>
-                                            </label>
-                                        </div>
-                                       <div class="flex justify-center items-center"> 
-                                            <label class="cursor-pointer">
-                                                <input class="hidden" name="color" type="radio" value="red" />
-                                                <div class="bg-black w-7 h-7 rounded-full border-2 border-transparent hover:border-gray-400"></div>
-                                            </label>
-                                        </div>
-                                        <div class="flex justify-center items-center"> 
-                                            <label class="cursor-pointer">
-                                                <input class="hidden" name="color" type="radio" value="red" />
-                                                <div class="bg-blue-800 w-7 h-7 rounded-full border-2 border-transparent hover:border-gray-400"></div>
-                                            </label>
-                                        </div>
-                                        <div class="flex justify-center items-center"> 
-                                            <label class="cursor-pointer">
-                                                <input class="hidden" name="color" type="radio" value="red" />
-                                                <div class="bg-slate-700 w-7 h-7 rounded-full border-2 border-transparent hover:border-gray-400"></div>
-                                            </label>
-                                        </div>
-                                    </div> --}}
                 @if ($otherProducts->isNotEmpty())
                   <div class="flex flex-col w-1/5 justify-center items-start uppercase font-Urbanist_Black">
                     <h2>Colores:</h2>
                   </div>
-
-                  {{-- <span class="block bg-[#F5F5F7] p-3 mt-2" tippy> {{ $product->color }}</span> --}}
                   <div class="flex flex-wrap w-4/5 gap-2 lg:gap-4 justify-start items-center font-Urbanist_Medium">
                     <a class="ring-1 rounded-full p-[3px] ring-[#3f3f3f]" tippy data-tippy-content="Seleccionado">
                       <div class="flex justify-center items-center">
@@ -267,8 +215,6 @@
                 <div class="flex flex-wrap w-4/5 gap-2 lg:gap-4 justify-start items-center font-Urbanist_Medium">
                   <div id="talla-{{ $product->id }}" data-productid="{{ $product->id }}"
                     class="tallaSelected tallas ring-1 p-[3px] flex items-center justify-center cursor-pointer  rounded-full hover:ring-1  ring-[#3f3f3f]">
-                    {{-- <input id="talla-{{$product->id}}" type="radio" name="talla" value="{{ $product->peso }}"
-                                            data-product="{{ $product->id }}" class="hidden talla-radio"> --}}
                     <div class="flex justify-center items-center w-7 lg:w-8 h-7 lg:h-8 text-base transition talla-span">
                       {{ $product->peso }}
                     </div>
@@ -276,8 +222,6 @@
                   @foreach ($tallasdeProductos as $t)
                     <div id="talla-{{ $t->id }}" data-productid="{{ $t->id }}"
                       class="tallas flex items-center justify-center p-[3px] cursor-pointer  rounded-full hover:ring-1  ring-[#3f3f3f]">
-                      {{-- <input id="talla-{{$t->id}}" type="radio" name="talla" value="{{ $t->peso }}"
-                                                data-product="{{ $t->id }}" class="hidden talla-radio"> --}}
                       <div class="flex justify-center items-center text-base w-7 lg:w-8 h-7 lg:h-8 transition talla-span">
                         {{ $t->peso }}
                       </div>
@@ -575,6 +519,14 @@
       string = string.toLowerCase()
       return string.charAt(0).toUpperCase() + string.slice(1);
     }
+
+    var productId = {{ $product->id }};
+    var stock = {{ $product->stock }};
+
+    const getAlreadyInCart = (id) => {
+      return (Local.get('carrito') ?? []).find(x => x.id == id)?.cantidad ?? 0
+    }
+
     // })
     $('#disminuir').on('click', function() {
       let cantidad = Number($('#cantidadSpan span').text())
@@ -588,7 +540,14 @@
     // cantidadSpan
     $('#aumentar').on('click', function() {
       let cantidad = Number($('#cantidadSpan span').text())
+      let already = getAlreadyInCart(productId);
       cantidad++
+      if (cantidad > (stock - already)) return Swal.fire({
+        title: 'Error',
+        text: `No se puede agregar más de ${stock} items de este producto ${already>0?`\nYa tienes ${already} items agregados en el carrito`: ''}`,
+        icon: 'warning',
+        confirmButtonText: 'Aceptar'
+      })
       $('#cantidadSpan span').text(cantidad)
 
     })
@@ -612,7 +571,7 @@
 
       function buscarTallaProducto() {
         let tallaSelected = $('.tallaSelected');
-        let productId = tallaSelected.data('productid');
+        productId = tallaSelected.data('productid');
 
         $.ajax({
           url: '{{ route('buscarTalla') }}',
@@ -622,7 +581,6 @@
             _token: '{{ csrf_token() }}'
           },
           success: function(response) {
-            console.log(response);
             $('#num_sku').text(response.producto[0].sku);
             $('#btnAgregarCarritoPr').attr('data-id', response.producto[0].id);
 
@@ -634,7 +592,7 @@
             }, '', newUrl);
 
             //$('#num_stock').text(Math.floor(response.producto[0].stock));
-            let stock = response.producto[0].stock;
+            stock = Number(response.producto[0].stock);
             let precio = parseFloat(response.producto[0].precio);
             let descuento = parseFloat(response.producto[0].descuento);
 
@@ -682,6 +640,14 @@
             }
 
             $('#seccionprecio').html(seccionPrecioHTML);
+
+            // INICIO: regulariza el stock
+            if ($('#cantidadSpan span').text() == 0) $('#cantidadSpan span').text(1); 
+            const already = getAlreadyInCart(productId);
+            if ($('#cantidadSpan span').text() > (stock - already)) {
+              $('#cantidadSpan span').text(stock - already)
+            }
+            // FIN: regulariza el stock
 
             if (Number(stock) > 0) {
               //console.log('numero mayora a 0 ')

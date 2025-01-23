@@ -467,7 +467,7 @@ function PintarCarrito() {
   itemsCarrito.empty()
   itemsCarritoCheck.empty()
 
-  const carrito = Local.get('carrito') ?? []
+  const carrito = Local.get('carrito') ?? [];
   const cupon = Local.get('cupon') ?? []
   const login = Local.get('autenticado') ?? []
   const carritoDescuentoMismoProducto = []

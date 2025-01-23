@@ -9,7 +9,7 @@
   <div class="p-4 flex flex-col h-screen justify-between gap-2">
     <div class="flex flex-col">
       <div class="flex justify-between ">
-        <h2 class="font-medium text-[28px] text-[#151515] pb-5">Carrito</h2>
+        <h2 class="font-medium text-[28px] text-[#151515] pb-5">Carrito xD</h2>
         <div id="close-cart" class="cursor-pointer">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
@@ -79,9 +79,11 @@
   }
 
   function PintarCarrito() {
-    const articulosCarrito = Local.get('carrito') ?? [];
+    const articulosCarrito = (Local.get('carrito') ?? []).filter(x => x.cantidad > 0);
     let itemsCarrito = $('[id="itemsCarrito"]')
     let itemsCarritoCheck = $('[id="itemsCarritoCheck"]')
+
+    Local.set('carrito', articulosCarrito);
 
     articulosCarrito.forEach(element => {
       let plantilla = `<tr class=" font-poppins border-b">
