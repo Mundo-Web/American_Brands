@@ -27,6 +27,7 @@ use App\Models\TermsAndCondition;
 use App\Models\TimeAndPriceDelivery;
 use App\Models\TratamientoAdicionalDatos;
 use App\Observers\ItemSlugObserver;
+use App\Observers\SaleStatusObserver;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Pagination\Paginator as PaginationPaginator;
 use Illuminate\Support\Facades\View;
@@ -82,7 +83,7 @@ class AppServiceProvider extends ServiceProvider
             $logosfooter = Service::where('visible', true)->get();
 
 
-            $view->with(['logosfooter'=> $logosfooter,'NuestrasTiendas'=> $NuestrasTiendas, 'SeguimientoPedido'=> $SeguimientoPedido, 'BeneficiosSinIntereses'=> $BeneficiosSinIntereses, 'CampanasPublicitarias'=> $CampanasPublicitarias, 'TratamientoAdicionalDatos'=> $TratamientoAdicionalDatos, 'PoliticasCookies'=> $PoliticasCookies, 'PoliticasCookies'=> $PoliticasCookies, 'PlazosDeReembolso'=> $PlazosDeReembolso,'TimeAndPriceDelivery'=> $TimeAndPriceDelivery,'datosgenerales' => $datosgenerales, 'politicas' => $politicDev, 'terminos' => $termsAndCondicitions, 'politicaDatos' => $politicaDatos]);
+            $view->with(['logosfooter' => $logosfooter, 'NuestrasTiendas' => $NuestrasTiendas, 'SeguimientoPedido' => $SeguimientoPedido, 'BeneficiosSinIntereses' => $BeneficiosSinIntereses, 'CampanasPublicitarias' => $CampanasPublicitarias, 'TratamientoAdicionalDatos' => $TratamientoAdicionalDatos, 'PoliticasCookies' => $PoliticasCookies, 'PoliticasCookies' => $PoliticasCookies, 'PlazosDeReembolso' => $PlazosDeReembolso, 'TimeAndPriceDelivery' => $TimeAndPriceDelivery, 'datosgenerales' => $datosgenerales, 'politicas' => $politicDev, 'terminos' => $termsAndCondicitions, 'politicaDatos' => $politicaDatos]);
         });
 
         View::composer('components.public.header', function ($view) {
@@ -96,7 +97,7 @@ class AppServiceProvider extends ServiceProvider
             }])->get();
 
             $marcas = ClientLogos::where('status', true)->where('visible', true)->get();
-                 
+
             $tags = Tag::where('is_menu', 1)
                 ->where("status", "=", true)
                 ->where("visible", "=", true)
@@ -133,19 +134,20 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('components.shortcode.contain_body', function ($view) {
             $shortcode = Shortcode::find(1);
-           
+
             $view->with('shortcode', $shortcode);
         });
 
 
         View::composer('components.shortcode.contain_head', function ($view) {
             $shortcode = Shortcode::find(1);
-           
+
             $view->with('shortcode', $shortcode);
         });
 
         PaginationPaginator::useTailwind();
 
         Products::observe(ItemSlugObserver::class);
+        Sale::observe(SaleStatusObserver::class);
     }
 }

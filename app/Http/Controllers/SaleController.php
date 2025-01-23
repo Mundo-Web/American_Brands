@@ -153,6 +153,7 @@ class SaleController extends Controller
                 $detailJpa->quantity = $item['cantidad'];
                 $detailJpa->price = $item['precio'];
                 $detailJpa->final_price = $item['totalPrice'];
+                $detailJpa->product_id = $item['id'];
                 $detailJpa->product_color = $item['color'];
                 $detailJpa->talla = $item['peso'];
                 

@@ -18,6 +18,8 @@ class SaleDetail extends Model
         'price',
         'talla',
         'final_price',
-        'marca'
+        'marca',
+        'product_id',
+        'stock_reduced'
     ];
 }
