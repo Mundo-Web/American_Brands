@@ -67,10 +67,10 @@ class SaveItems implements ShouldQueue
       Productos: {$prCount}
       Tags: {$tgCount}");
 
-      Specifications::whereNotNull('id')->delete();
-      Galerie::whereNotNull('id')->delete();
-      Products::whereNotNull('id')->delete();
-      Tag::whereNotNull('id')->delete();
+      Specifications::query()->delete();
+      Galerie::query()->delete();
+      Products::query()->delete();
+      Tag::query()->delete();
 
       $spCount = Specifications::count();
       $glCount = Galerie::count();
