@@ -14,6 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Products;
 use App\Models\ProductTag;
+use App\Models\SaleDetail;
 use App\Models\Specifications;
 use App\Models\SubCategory;
 use App\Models\Tag;
@@ -67,10 +68,11 @@ class SaveItems implements ShouldQueue
       Productos: {$prCount}
       Tags: {$tgCount}");
 
-      Specifications::whereNotNull('id')->delete();
-      Galerie::whereNotNull('id')->delete();
-      Products::whereNotNull('id')->delete();
-      Tag::whereNotNull('id')->delete();
+      SaleDetail::whereNotNull('product_id')->update(['product_id' => null]);
+      Specifications::query()->delete();
+      Galerie::query()->delete();
+      Products::query()->delete();
+      Tag::query()->delete();
 
       $spCount = Specifications::count();
       $glCount = Galerie::count();
