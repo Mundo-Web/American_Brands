@@ -42,8 +42,6 @@ class SaveItems implements ShouldQueue
   {
 
     $path2search = "./storage/images/products/";
-    $path2size = "storage/images/sizes/";
-
 
     $images = [];
     try {
@@ -182,7 +180,7 @@ class SaveItems implements ShouldQueue
           'color' => $item[10],
           'peso' => $item[12],
           'stock' => $item[13],
-          'imagen_ambiente' => $path2size . $item[1],
+          'imagen_ambiente' => $path2size . $item[1] . '.jpg',
           'discount_id' => $discountJpa?->id,
           'visible' => 1,
           'percent_discount' => $percent,
