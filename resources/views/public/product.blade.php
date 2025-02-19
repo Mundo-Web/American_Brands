@@ -279,7 +279,7 @@
                 @php
                   use Illuminate\Support\Facades\File;
                   $imagenAmbiente = $product->imagen_ambiente;
-                  $rutaImagen = public_path('images/products/' . $imagenAmbiente);
+                  $rutaImagen = public_path($imagenAmbiente);
                   $isImage = $imagenAmbiente && File::exists($rutaImagen);
                 @endphp
               
