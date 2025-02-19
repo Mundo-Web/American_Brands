@@ -42,10 +42,13 @@ class SaveItems implements ShouldQueue
   {
 
     $path2search = "./storage/images/products/";
+    $path2size = "storage/images/sizes/";
+
 
     $images = [];
     try {
       $images = File::scan($path2search);
+    
     } catch (\Throwable $th) {
       dump($th->getMessage());
     }
@@ -100,7 +103,6 @@ class SaveItems implements ShouldQueue
         $imageRoute = \str_replace('{10}', $item[10], $imageRoute);
 
         $productImages = \array_filter($images, fn($image) => Text::startsWith($image, $imageRoute));
-
 
         // Searching or Creating a Category
         $categoryJpa = Category::updateOrCreate([
@@ -179,9 +181,12 @@ class SaveItems implements ShouldQueue
           'color' => $item[10],
           'peso' => $item[12],
           'stock' => $item[13],
+          'imagen_ambiente' => $path2size . $item[1],
           'discount_id' => $discountJpa?->id,
           'visible' => 1,
-          'percent_discount' => $percent
+          'percent_discount' => $percent,
+          
+
         ]);
 
         $i = 0;

@@ -276,14 +276,21 @@
                                         <div class="flex justify-center items-center">34</div>
                                     </div>
                               </div> --}}
-              @if ($product->imagen_ambiente)
-                <div class="flex flex-row">
-                  <div id="linkmodal" class="flex flex-row gap-2 border w-auto px-3 py-1 border-black cursor-pointer">
-                    <img class="h-4 object-contain" src="{{ asset('images/img/ruler.png') }}" />
-                    <p class="font-Urbanist_Bold text-sm">GUÍA DE TALLAS</p>
+                @php
+                  use Illuminate\Support\Facades\File;
+                  $imagenAmbiente = $product->imagen_ambiente;
+                  $rutaImagen = public_path('images/products/' . $imagenAmbiente);
+                  $isImage = $imagenAmbiente && File::exists($rutaImagen);
+                @endphp
+              
+                @if ($isImage)
+                  <div class="flex flex-row">
+                    <div id="linkmodal" class="flex flex-row gap-2 border w-auto px-3 py-1 border-black cursor-pointer">
+                      <img class="h-4 object-contain" src="{{ asset('images/img/ruler.png') }}" />
+                      <p class="font-Urbanist_Bold text-sm">GUÍA DE TALLAS</p>
+                    </div>
                   </div>
-                </div>
-              @endif
+                @endif
 
             </div>
 
