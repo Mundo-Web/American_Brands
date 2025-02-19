@@ -42,6 +42,8 @@ class SaveItems implements ShouldQueue
   {
 
     $path2search = "./storage/images/products/";
+    $path2size = "storage/images/sizes/";
+
 
     $images = [];
     try {
