@@ -171,6 +171,7 @@ class SaveItems implements ShouldQueue
         ], [
           'codigo' => $item[1],
           'producto' => $item[2],
+          'imagen' => null,
           'extract' => $item[3],
           'description' => $item[4],
           'categoria_id' => $categoryJpa->id,
