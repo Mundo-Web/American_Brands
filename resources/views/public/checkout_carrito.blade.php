@@ -3,9 +3,8 @@
 @section('css_importados')
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
-
 @stop
+
 <style>
   .fixedWhastapp {
     right: 128px !important;
@@ -51,8 +50,8 @@
               <label for="email" class="font-medium text-[13px] text-[#6C7275]">E-mail <span
                   class="text-[#c1272d]">*</span></label>
               <input id="email" type="email" placeholder="Correo electrónico" 
-                name="email" value=""
-                {{-- value="{{ auth()->check() ? auth()->user()->email : '' }}" --}}
+                name="email" value="{{ auth()->check() ? auth()->user()->email : '' }}"
+                
                 class="w-full py-3 px-4 focus:outline-none focus:ring-[#c1272d] focus:border-[#c1272d] placeholder-gray-400 font-normal text-[16px] border-[1.5px] border-gray-200 rounded-xl text-[#6C7275]"
                 required>
             </div>
@@ -101,7 +100,7 @@
             </ul>
             <div id="direccionContainer" class="flex flex-col gap-5 font-Urbanist_Regular">
               <div class="flex flex-col gap-5">
-                @if (count($addresses) > 0)
+                @if (isset($addresses) && is_array($addresses) && count($addresses) > 0)
                   <div class="flex flex-col gap-5 md:flex-row">
                     <div class="basis-2/3 flex flex-col gap-2 z-[45]">
                       <label class="font-medium text-[12px] text-[#6C7275]">Tu lista de direcciones<span
@@ -281,6 +280,7 @@
           </div>
         </div>
       </div>
+
       {{-- @if ($destacados->count() > 0)
         <h1 class="text-2xl md:text-3xl font-semibold font-Urbanist_Bold text-[#323232] mb-2 mt-4">Aprovecha estas
           ofertas
@@ -303,7 +303,6 @@
             <div class="swiper-button-prev"></div>
           </div>
         </div>
-
       @endif --}}
 
     </section>
@@ -577,7 +576,11 @@
         envio: value
       })
       PintarCarrito()
+      
     })
+
+    const direcion = Local.get('address') ?? []
+    console.log(direcion);
 
     const provinces = @json($provinces);
     const districts = @json($districts);
@@ -786,6 +789,17 @@
         ...email,
         email: this.value
       })
+    })
+
+    $(document).ready(function() {
+      const initialEmail = $('#email').val().trim();
+      if (initialEmail) {
+          const email = Local.get('datospersonales') ?? {}
+          Local.set('datospersonales', {
+            ...email,
+            email: initialEmail
+          })
+      }
     })
 
     $('#nombre_calle').val(addressStrg.street ?? '')

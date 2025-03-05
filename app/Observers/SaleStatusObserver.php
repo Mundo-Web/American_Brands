@@ -17,10 +17,11 @@ class SaleStatusObserver
                 ->get();
 
             foreach ($details as $detail) {
-                $item = Products::find($detail->id);
+                $item = Products::find($detail->product_id);
                 if (!$item) continue;
 
-                $item->stock -= $detail->quantity;
+                $quantity = (float) $detail->quantity;
+                $item->stock -= $quantity;
                 $detail->stock_reduced = true;
 
                 $item->save();

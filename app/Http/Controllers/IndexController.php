@@ -302,7 +302,7 @@ class IndexController extends Controller
       ->where('departments.active', 1)
       ->where('status', 1)
       ->groupBy('id', 'description')
-      ->get();
+      ->get() ?? [];
 
     $provinces = Price::select([
       'provinces.id AS id',
@@ -313,7 +313,7 @@ class IndexController extends Controller
       ->join('provinces', 'provinces.id', 'districts.province_id')
       ->where('provinces.active', 1)
       ->groupBy('id', 'description', 'department_id')
-      ->get();
+      ->get() ?? [];
 
     $districts = Price::select([
       'districts.id AS id',
@@ -326,7 +326,7 @@ class IndexController extends Controller
       ->join('districts', 'districts.id', 'prices.distrito_id')
       ->where('districts.active', 1)
       ->groupBy('id', 'description', 'province_id', 'price', 'price_id')
-      ->get();
+      ->get() ?? [];
 
     $addresses = [];
     $historicoCupones = [];
@@ -598,7 +598,7 @@ class IndexController extends Controller
       $saleJpa->save();
       return \redirect()->route('index');
     }
-
+    
     if ($usuario && $saleJpa->idcupon  ) {
         DB::table('historico_cupones')
         ->where('cupones_id', $saleJpa->idcupon)
