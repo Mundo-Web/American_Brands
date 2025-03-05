@@ -550,7 +550,7 @@
       let already = getAlreadyInCart(productId);
       cantidad++
       if (cantidad > (stock - already)) return Swal.fire({
-        title: 'Error',
+        title: 'No hay suficiente stock',
         text: `No se puede agregar más de ${stock} items de este producto ${already>0?`\nYa tienes ${already} items agregados en el carrito`: ''}`,
         icon: 'warning',
         confirmButtonText: 'Aceptar'
