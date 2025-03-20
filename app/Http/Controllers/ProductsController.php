@@ -757,8 +757,7 @@ class ProductsController extends Controller
   {
     $ids = array_map(fn($item) => $item['sku'], $cart);
 
-    $productsJpa = Products::select(['*'])
-      ->with(['discount'])
+    $productsJpa = Products::with(['discount'])
       ->whereIn('sku', $ids)
       ->get();
 
@@ -813,7 +812,7 @@ class ProductsController extends Controller
         $cuota = $totalByDiscount - $modulo; // Total de productos a procesar para el descuento
 
         foreach ($products as $item) {
-          $cantidadPorProducto = $cuota >= $item['cantidad'] ? $item['cantidad'] : $item['cantidad'] - $cuota;
+          $cantidadPorProducto = $cuota >= $item['cantidad'] ? $item['cantidad'] : $cuota;
 
           if ($cuota >= $item['cantidad']) {
             // Si la cuota cubre la cantidad del producto, se añade al grupo con descuento
@@ -822,12 +821,12 @@ class ProductsController extends Controller
             // Si no, parte va con descuento y parte sin descuento
             $descuentoDistintoProducto[] = array_merge($item, ['cantidad' => $cuota]);
             $cartWODiscount[] = array_merge($item, [
-              'cantidad' => $cantidadPorProducto,
+              'cantidad' => $item['cantidad'] - $cuota,
               'discount' => null
             ]);
           }
           // Reducir la cuota según la cantidad procesada
-          $cuota -= $cantidadPorProducto;
+          $cuota = $cuota - $cantidadPorProducto;
         }
 
         // Añadir productos procesados con descuento
@@ -847,6 +846,8 @@ class ProductsController extends Controller
       array_map(fn($x) => [$x], $cartWODiscount)
     );
 
+    dump($cartFinal);
+
     $cartToDraw = [];
 
     foreach ($cartFinal as $group) {
@@ -862,7 +863,6 @@ class ProductsController extends Controller
       foreach ($group as $index => $item) {
         // Calcular el precio final y total
         $finalPrice = min(array_filter([floatval($item['precio']), floatval($item['descuento'])]));
-        // dump($item['producto'] . ': ' . $finalPrice);
         $totalPrice = $finalPrice * $item['cantidad'];
 
         if (isset($item['discount'])) {
