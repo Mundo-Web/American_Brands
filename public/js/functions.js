@@ -554,6 +554,7 @@ function PintarCarrito() {
           } else if (item.discount.apply_to == 'lower') {
             finalPrice = 0
             totalPrice = 0
+            console.log(discountArray)
             for (let index = 0; index < item.cantidad; index++) {
               const cobrar = discountArray[iterator]
               finalPrice += item.precio * cobrar / item.cantidad

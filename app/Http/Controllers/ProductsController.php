@@ -871,7 +871,7 @@ class ProductsController extends Controller
             } elseif ($item['discount']['apply_to'] == 'lower') {
               $finalPrice = 0;
               $totalPrice = 0;
-
+              dump($discountArray);
               for ($i = 0; $i < $item['cantidad']; $i++) {
                 $cobrar = $discountArray[$iterator];
                 $finalPrice += $item['precio'] * $cobrar / $item['cantidad'];
