@@ -726,7 +726,6 @@ class ProductsController extends Controller
   private static function generateDiscountArray($quantity, $take, $pay)
   {
     $result = array_fill(0, $quantity, 0);
-    dump($result);
     $remainingPay = $pay;
     $currentTake = 0;
 
@@ -743,12 +742,8 @@ class ProductsController extends Controller
         $result[$i] = $remainingPay;
         $remainingPay = 0;
       }
-      dump($currentTake);
-
       $currentTake++;
     }
-
-    dump($result);
 
     // Ordenar el resultado en orden descendente
     rsort($result);

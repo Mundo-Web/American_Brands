@@ -436,7 +436,6 @@ const Number2Currency = (number, currency = 'en-US') => {
 
 function generateDiscountArray(quantity, take, pay) {
   const result = new Array(quantity).fill(0)
-  console.log(result)
   let remainingPay = pay
   let currentTake = 0
 
@@ -453,12 +452,8 @@ function generateDiscountArray(quantity, take, pay) {
       result[i] = remainingPay
       remainingPay = 0
     }
-
-    console.log(currentTake);
-
     currentTake++
   }
-  console.log(result)
 
   return result.sort((a, b) => b - a)
 }
