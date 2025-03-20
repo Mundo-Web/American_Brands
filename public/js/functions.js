@@ -546,8 +546,6 @@ function PintarCarrito() {
       let finalPrice = Math.min(...[Number(item.precio), Number(item.descuento)].filter(Boolean));
       let totalPrice = finalPrice * item.cantidad
 
-      console.log(finalPrice, totalPrice)
-
       if (item.discount) {
         if (item.discount.type_id == 1) {
           if (item.discount.apply_to == 'self') {
@@ -562,6 +560,7 @@ function PintarCarrito() {
               totalPrice += item.precio * cobrar
               iterator++
             }
+            console.log(item.producto, finalPrice, totalPrice, iterator)
           }
         } else {
           finalPrice = (item.precio * payment) / 100
