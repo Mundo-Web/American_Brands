@@ -731,7 +731,7 @@ class ProductsController extends Controller
     $currentTake = 0;
 
     for ($i = 0; $i < $quantity; $i++) {
-      if ($currentTake === $take) {
+      if ($currentTake == $take) {
         $currentTake = 0;
         $remainingPay = $pay;
       }
@@ -739,10 +739,11 @@ class ProductsController extends Controller
       if ($remainingPay >= 1) {
         $result[$i] = 1;
         $remainingPay -= 1;
-      } elseif ($remainingPay > 0) {
+      } else if ($remainingPay > 0) {
         $result[$i] = $remainingPay;
         $remainingPay = 0;
       }
+      dump($currentTake);
 
       $currentTake++;
     }

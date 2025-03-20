@@ -441,7 +441,7 @@ function generateDiscountArray(quantity, take, pay) {
   let currentTake = 0
 
   for (let i = 0; i < quantity; i++) {
-    if (currentTake === take) {
+    if (currentTake == take) {
       currentTake = 0
       remainingPay = pay
     }
@@ -453,6 +453,8 @@ function generateDiscountArray(quantity, take, pay) {
       result[i] = remainingPay
       remainingPay = 0
     }
+
+    console.log(currentTake);
 
     currentTake++
   }
