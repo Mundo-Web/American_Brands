@@ -537,6 +537,7 @@ function PintarCarrito() {
     let cuota = Number(group[0].discount?.take_product ?? 0)
     const payment = Number(group[0].discount?.payment_product ?? 0)
     const cantidadTotal = Math.sum(...group.map(x => x.cantidad))
+    console.log(cantidadTotal, cuota, payment)
     let discountArray = generateDiscountArray(cantidadTotal, cuota, payment)
     let iterator = 0
 
@@ -554,14 +555,12 @@ function PintarCarrito() {
           } else if (item.discount.apply_to == 'lower') {
             finalPrice = 0
             totalPrice = 0
-            console.log(discountArray)
             for (let index = 0; index < item.cantidad; index++) {
               const cobrar = discountArray[iterator]
               finalPrice += item.precio * cobrar / item.cantidad
               totalPrice += item.precio * cobrar
               iterator++
             }
-            console.log(item.producto, finalPrice, totalPrice, cuota)
           }
         } else {
           finalPrice = (item.precio * payment) / 100

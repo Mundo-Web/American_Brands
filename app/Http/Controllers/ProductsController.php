@@ -853,6 +853,7 @@ class ProductsController extends Controller
       $payment = isset($group[0]['discount']['payment_product']) ? (float) $group[0]['discount']['payment_product'] : 0;
       $cantidadTotal = array_sum(array_map(fn($x) => $x['cantidad'], $group));
 
+      dump($cantidadTotal . ' - ' . $cuota . ' - ' . $payment);
       // Generar un arreglo de descuento (presumo que tienes una función `generateDiscountArray` en PHP)
       $discountArray = ProductsController::generateDiscountArray($cantidadTotal, $cuota, $payment);
 
@@ -871,14 +872,12 @@ class ProductsController extends Controller
             } elseif ($item['discount']['apply_to'] == 'lower') {
               $finalPrice = 0;
               $totalPrice = 0;
-              dump($discountArray);
               for ($i = 0; $i < $item['cantidad']; $i++) {
                 $cobrar = $discountArray[$iterator];
                 $finalPrice += $item['precio'] * $cobrar / $item['cantidad'];
                 $totalPrice += $item['precio'] * $cobrar;
                 $iterator++;
               }
-              dump($item['producto'] . ', ' . $finalPrice . ', ' . $totalPrice . ', ' . $cuota);
             }
           } else {
             $finalPrice = ($item['precio'] * $payment) / 100;
