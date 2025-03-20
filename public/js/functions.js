@@ -436,6 +436,7 @@ const Number2Currency = (number, currency = 'en-US') => {
 
 function generateDiscountArray(quantity, take, pay) {
   const result = new Array(quantity).fill(0)
+  console.log(result)
   let remainingPay = pay
   let currentTake = 0
 
@@ -455,6 +456,7 @@ function generateDiscountArray(quantity, take, pay) {
 
     currentTake++
   }
+  console.log(result)
 
   return result.sort((a, b) => b - a)
 }
@@ -537,7 +539,6 @@ function PintarCarrito() {
     let cuota = Number(group[0].discount?.take_product ?? 0)
     const payment = Number(group[0].discount?.payment_product ?? 0)
     const cantidadTotal = Math.sum(...group.map(x => x.cantidad))
-    console.log(cantidadTotal, cuota, payment)
     let discountArray = generateDiscountArray(cantidadTotal, cuota, payment)
     let iterator = 0
 

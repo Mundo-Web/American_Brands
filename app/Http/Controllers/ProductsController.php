@@ -726,6 +726,7 @@ class ProductsController extends Controller
   private static function generateDiscountArray($quantity, $take, $pay)
   {
     $result = array_fill(0, $quantity, 0);
+    dump($result);
     $remainingPay = $pay;
     $currentTake = 0;
 
@@ -745,6 +746,8 @@ class ProductsController extends Controller
 
       $currentTake++;
     }
+
+    dump($result);
 
     // Ordenar el resultado en orden descendente
     rsort($result);
@@ -853,7 +856,6 @@ class ProductsController extends Controller
       $payment = isset($group[0]['discount']['payment_product']) ? (float) $group[0]['discount']['payment_product'] : 0;
       $cantidadTotal = array_sum(array_map(fn($x) => $x['cantidad'], $group));
 
-      dump($cantidadTotal . ' - ' . $cuota . ' - ' . $payment);
       // Generar un arreglo de descuento (presumo que tienes una función `generateDiscountArray` en PHP)
       $discountArray = ProductsController::generateDiscountArray($cantidadTotal, $cuota, $payment);
 
