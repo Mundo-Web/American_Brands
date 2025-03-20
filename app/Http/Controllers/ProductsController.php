@@ -176,7 +176,7 @@ class ProductsController extends Controller
   {
     $response = Response::simpleTryCatch(function () use ($request) {
       $body = $request->all();
-      return Products::select(['id', 'stock'])->whereIn('id', $body)->get()->map(function($item) {
+      return Products::select(['id', 'stock'])->whereIn('id', $body)->get()->map(function ($item) {
         $item->stock = \intval($item->stock);
         return $item;
       });
@@ -861,7 +861,7 @@ class ProductsController extends Controller
       foreach ($group as $index => $item) {
         // Calcular el precio final y total
         $finalPrice = min(array_filter([floatval($item['precio']), floatval($item['descuento'])]));
-        dump($finalPrice);
+        dump($item['Producto'] . ': ' . $finalPrice);
         $totalPrice = $finalPrice * $item['cantidad'];
 
         if (isset($item['discount'])) {
