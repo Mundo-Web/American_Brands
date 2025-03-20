@@ -757,7 +757,8 @@ class ProductsController extends Controller
   {
     $ids = array_map(fn($item) => $item['sku'], $cart);
 
-    $productsJpa = Products::with(['discount'])
+    $productsJpa = Products::select(['*'])
+      ->with(['discount'])
       ->whereIn('sku', $ids)
       ->get();
 
@@ -861,7 +862,7 @@ class ProductsController extends Controller
       foreach ($group as $index => $item) {
         // Calcular el precio final y total
         $finalPrice = min(array_filter([floatval($item['precio']), floatval($item['descuento'])]));
-        dump($item['producto'] . ': ' . $finalPrice);
+        // dump($item['producto'] . ': ' . $finalPrice);
         $totalPrice = $finalPrice * $item['cantidad'];
 
         if (isset($item['discount'])) {
