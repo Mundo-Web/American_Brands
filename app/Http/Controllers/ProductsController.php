@@ -861,6 +861,7 @@ class ProductsController extends Controller
       foreach ($group as $index => $item) {
         // Calcular el precio final y total
         $finalPrice = min(array_filter([floatval($item['precio']), floatval($item['descuento'])]));
+        dump($finalPrice);
         $totalPrice = $finalPrice * $item['cantidad'];
 
         if (isset($item['discount'])) {
