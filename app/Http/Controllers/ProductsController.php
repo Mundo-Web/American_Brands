@@ -747,7 +747,6 @@ class ProductsController extends Controller
 
     // Ordenar el resultado en orden descendente
     rsort($result);
-
     return $result;
   }
 
