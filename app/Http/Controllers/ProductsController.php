@@ -846,8 +846,6 @@ class ProductsController extends Controller
       array_map(fn($x) => [$x], $cartWODiscount)
     );
 
-    dump($cartFinal);
-
     $cartToDraw = [];
 
     foreach ($cartFinal as $group) {
@@ -903,6 +901,8 @@ class ProductsController extends Controller
         }
       }
     }
+
+    dump($cartToDraw);
 
     return $cartToDraw;
   }
