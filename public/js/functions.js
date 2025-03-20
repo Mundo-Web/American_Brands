@@ -545,6 +545,9 @@ function PintarCarrito() {
 
       let finalPrice = Math.min(...[Number(item.precio), Number(item.descuento)].filter(Boolean));
       let totalPrice = finalPrice * item.cantidad
+
+      console.log(finalPrice, totalPrice)
+
       if (item.discount) {
         if (item.discount.type_id == 1) {
           if (item.discount.apply_to == 'self') {

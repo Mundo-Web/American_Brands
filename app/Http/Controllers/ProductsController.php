@@ -863,6 +863,8 @@ class ProductsController extends Controller
         $finalPrice = min(array_filter([floatval($item['precio']), floatval($item['descuento'])]));
         $totalPrice = $finalPrice * $item['cantidad'];
 
+        dump($finalPrice . ' - ' . $totalPrice);
+
         if (isset($item['discount'])) {
           if ($item['discount']['type_id'] == 1) {
             if ($item['discount']['apply_to'] == 'self') {
