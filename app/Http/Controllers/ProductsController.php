@@ -812,7 +812,7 @@ class ProductsController extends Controller
         $cuota = $totalByDiscount - $modulo; // Total de productos a procesar para el descuento
 
         foreach ($products as $item) {
-          $cantidadPorProducto = $cuota >= $item['cantidad'] ? $item['cantidad'] : $cuota;
+          $cantidadPorProducto = $cuota >= $item['cantidad'] ? $item['cantidad'] : $item['cantidad'] - $cuota;
 
           if ($cuota >= $item['cantidad']) {
             // Si la cuota cubre la cantidad del producto, se añade al grupo con descuento
@@ -821,7 +821,7 @@ class ProductsController extends Controller
             // Si no, parte va con descuento y parte sin descuento
             $descuentoDistintoProducto[] = array_merge($item, ['cantidad' => $cuota]);
             $cartWODiscount[] = array_merge($item, [
-              'cantidad' => $item['cantidad'] - $cuota,
+              'cantidad' => $cantidadPorProducto,
               'discount' => null
             ]);
           }
