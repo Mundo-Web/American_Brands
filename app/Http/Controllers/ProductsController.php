@@ -878,7 +878,7 @@ class ProductsController extends Controller
                 $totalPrice += $item['precio'] * $cobrar;
                 $iterator++;
               }
-              dump($item['producto'] . ', ' . $finalPrice . ', ' . $totalPrice . ', ' . $iterator);
+              dump($item['producto'] . ', ' . $finalPrice . ', ' . $totalPrice . ', ' . $cuota);
             }
           } else {
             $finalPrice = ($item['precio'] * $payment) / 100;

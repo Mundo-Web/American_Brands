@@ -560,7 +560,7 @@ function PintarCarrito() {
               totalPrice += item.precio * cobrar
               iterator++
             }
-            console.log(item.producto, finalPrice, totalPrice, iterator)
+            console.log(item.producto, finalPrice, totalPrice, cuota)
           }
         } else {
           finalPrice = (item.precio * payment) / 100
