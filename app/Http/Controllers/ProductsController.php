@@ -176,7 +176,7 @@ class ProductsController extends Controller
   {
     $response = Response::simpleTryCatch(function () use ($request) {
       $body = $request->all();
-      return Products::select(['id', 'stock'])->whereIn('id', $body)->get()->map(function($item) {
+      return Products::select(['id', 'stock'])->whereIn('id', $body)->get()->map(function ($item) {
         $item->stock = \intval($item->stock);
         return $item;
       });
@@ -730,7 +730,7 @@ class ProductsController extends Controller
     $currentTake = 0;
 
     for ($i = 0; $i < $quantity; $i++) {
-      if ($currentTake === $take) {
+      if ($currentTake == $take) {
         $currentTake = 0;
         $remainingPay = $pay;
       }
@@ -738,17 +738,15 @@ class ProductsController extends Controller
       if ($remainingPay >= 1) {
         $result[$i] = 1;
         $remainingPay -= 1;
-      } elseif ($remainingPay > 0) {
+      } else if ($remainingPay > 0) {
         $result[$i] = $remainingPay;
         $remainingPay = 0;
       }
-
       $currentTake++;
     }
 
     // Ordenar el resultado en orden descendente
     rsort($result);
-
     return $result;
   }
 
@@ -826,7 +824,7 @@ class ProductsController extends Controller
             ]);
           }
           // Reducir la cuota según la cantidad procesada
-          $cuota -= $cantidadPorProducto;
+          $cuota = $cuota - $cantidadPorProducto;
         }
 
         // Añadir productos procesados con descuento
@@ -871,7 +869,6 @@ class ProductsController extends Controller
             } elseif ($item['discount']['apply_to'] == 'lower') {
               $finalPrice = 0;
               $totalPrice = 0;
-
               for ($i = 0; $i < $item['cantidad']; $i++) {
                 $cobrar = $discountArray[$iterator];
                 $finalPrice += $item['precio'] * $cobrar / $item['cantidad'];

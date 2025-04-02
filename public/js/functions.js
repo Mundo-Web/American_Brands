@@ -440,7 +440,7 @@ function generateDiscountArray(quantity, take, pay) {
   let currentTake = 0
 
   for (let i = 0; i < quantity; i++) {
-    if (currentTake === take) {
+    if (currentTake == take) {
       currentTake = 0
       remainingPay = pay
     }
@@ -452,7 +452,6 @@ function generateDiscountArray(quantity, take, pay) {
       result[i] = remainingPay
       remainingPay = 0
     }
-
     currentTake++
   }
 
@@ -545,6 +544,7 @@ function PintarCarrito() {
 
       let finalPrice = Math.min(...[Number(item.precio), Number(item.descuento)].filter(Boolean));
       let totalPrice = finalPrice * item.cantidad
+
       if (item.discount) {
         if (item.discount.type_id == 1) {
           if (item.discount.apply_to == 'self') {

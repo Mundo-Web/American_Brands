@@ -260,11 +260,11 @@ return new class extends Migration
             ['id' => 'EH', 'description' => 'WESTERN SAHARA'],
             ['id' => 'YE', 'description' => 'YEMEN'],
             ['id' => 'ZM', 'description' => 'ZAMBIA'],
-           ['id' => 'ZW', 'description' => 'ZIMBABWE']
+            ['id' => 'ZW', 'description' => 'ZIMBABWE']
         ]);
 
         Schema::create('departments', function (Blueprint $table) {
-            $table->char('id', 2)->index();
+            $table->char('id', 2)->index()->unique();
             $table->string('description');
             $table->boolean('active')->default(true);
         });
@@ -298,7 +298,7 @@ return new class extends Migration
         ]);
 
         Schema::create('provinces', function (Blueprint $table) {
-            $table->char('id', 4)->index();
+            $table->char('id', 4)->index()->unique();
             $table->char('department_id', 2);
             $table->string('description');
             $table->boolean('active')->default(true);
@@ -2391,8 +2391,5 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
-    {
-         
-    }
+    public function down() {}
 };
