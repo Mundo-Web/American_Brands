@@ -207,8 +207,8 @@
 
       });
 
-      $(".btn_swithc").on("change", function() {
-
+      $("#tabladatos").on("change", ".btn_swithc", function() {
+        
         var status = 0;
         var id = $(this).attr('data-idService');
         let contenedor = $(this);
