@@ -40,30 +40,33 @@ class SaleController extends Controller
         $response = Response::simpleTryCatch(function () use ($request) {
            
             $cart = ProductsController::process($request->cart);
+            $address = $request->address ?? [];
+            $invited = $request->datos ?? [];
+            $cuponData = is_array($request->cupon) ? $request->cupon : [];
+            $Islogueado = $request->autenticado ?? false;
             
-            $address = $request->address;
-            $invited = $request->datos;
-            $cupon = $request->cupon;
-            $Islogueado = $request->autenticado;
-            
+            if (empty($address['district_id']) || empty($address['street'])) {
+                throw new Exception("La dirección no es válida");
+            }
 
             $priceJpa = Price::find($address['price_id'] ?? null);
+            $delivery = $priceJpa ? $priceJpa->price : 0;
 
             $microtime = microtime(true);
             $fechaActual = date('YmdHis');
             $microsegundos = sprintf("%06d", ($microtime - floor($microtime)) * 1000000);
             $orderId = $fechaActual . $microsegundos;
 
-            $delivery = 0;
-            if ($priceJpa) {
-                $delivery = $priceJpa->price;
-            }
-
-            $existeUser = UserDetails::where('email', $invited['email'])->get()->toArray();
-           
             
-            if (count($existeUser) === 0) {
+            // Verificar/crear usuario
+            $existeUser = UserDetails::where('email', $invited['email'])->get()->toArray();
+            // $user = auth()->user();
+            // $email = $invited['email'] ?? ($user ? $user->email : null);
+            // if (!$email) {
+            //     throw new Exception("El correo electrónico es requerido");
+            // }
 
+            if (count($existeUser) === 0) {
                 UserDetails::create([
                     'email' => $invited['email'],
                     'departamento_id' => $address['department_id'] ?? '-',
@@ -87,7 +90,6 @@ class SaleController extends Controller
                 //         return response()->json(['message' => 'Todos los datos están correctos']);
                 //     }
                     
-                    
                 // } else { 
                     $userdetailU = UserDetails::where('email', $invited['email'])->first();
                     $userdetailU->update([
@@ -103,8 +105,9 @@ class SaleController extends Controller
 
             }
 
+            
+            $idcupon = $cuponData['idcupon'] ?? 0;
             $descuento = 0;
-            $idcupon = $cupon['idcupon'] ?? 0 ;
             $hoyFecha = date('Y-m-d');
             $totalparcial = array_sum(array_map(fn($item) => $item['totalPrice'], $cart));
 
@@ -112,7 +115,6 @@ class SaleController extends Controller
             // $Usoesecupon =  HistoricoCupon::where('cupones_id', $cupon->id)->where('usado', true)->first();
             
             if ($cupon) {
-                
                 if ($cupon->porcentaje === 1) {
                     $descuento = ($totalparcial * (float) $cupon->monto) / 100; // Si el cupón es porcentual
                 } else {
@@ -143,8 +145,6 @@ class SaleController extends Controller
             $saleJpa->save();
 
             foreach ($cart as $item) {
-
-
 
                 $detailJpa = new SaleDetail();
                 $detailJpa->sale_id = $saleJpa->id;
