@@ -959,6 +959,7 @@
       console.log(cart);
       console.log(address);
       console.log(autenticado);
+      console.log(cupon);
 
       if (address.district_id == '') {
         Swal.fire({
