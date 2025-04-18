@@ -38,7 +38,7 @@ class SaleController extends Controller
     public function save(Request $request)
     {   
         $response = Response::simpleTryCatch(function () use ($request) {
-            dd($request->all());
+            
             $cart = ProductsController::process($request->cart);
             $address = $request->address ?? [];
             $invited = $request->datos ?? [];
