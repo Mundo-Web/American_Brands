@@ -107,7 +107,6 @@ class SaleController extends Controller
 
             
             $idcupon = $cuponData['idcupon'] ?? 0;
-            dd($idcupon);
             $descuento = 0;
             $hoyFecha = date('Y-m-d');
             $totalparcial = array_sum(array_map(fn($item) => $item['totalPrice'], $cart));
