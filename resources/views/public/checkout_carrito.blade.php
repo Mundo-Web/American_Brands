@@ -955,6 +955,10 @@
       const autenticado = Local.get('autenticado') ?? []
       const address = Local.get('address') ?? {envio: 'recoger'}
       
+      console.log(datos);
+      console.log(cart);
+      console.log(address);
+      console.log(autenticado);
 
       if (address.district_id == '') {
         Swal.fire({
