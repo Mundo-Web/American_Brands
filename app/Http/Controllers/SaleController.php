@@ -44,7 +44,7 @@ class SaleController extends Controller
             $invited = $request->datos ?? [];
             $cuponData = is_array($request->cupon) ? $request->cupon : [];
             $Islogueado = $request->autenticado ?? false;
-            dd($cuponData);
+            
             if (empty($address['district_id']) || empty($address['street'])) {
                 throw new Exception("La dirección no es válida");
             }
