@@ -102,7 +102,7 @@ class SaveItems implements ShouldQueue
         $imageRoute = \str_replace('{1}', $item[1], $this->image_route_pattern);
         $imageRoute = \str_replace('{10}', $item[10], $imageRoute);
 
-        $productImages = \array_filter($images, fn($image) => Text::startsWith($image, $imageRoute));
+        $productImages = \array_filter($images, fn($image) => Text::startsWith($image, $imageRoute . '_') || Text::startsWith($image, $imageRoute . '.'));
 
         // Searching or Creating a Category
         $categoryJpa = Category::updateOrCreate([
