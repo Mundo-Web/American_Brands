@@ -26,7 +26,22 @@ class UserDetails extends Model
 
 public function user()
 {
-    return $this->belongsTo(User::class);
+    return $this->belongsTo(User::class, 'email', 'email');
+}
+
+public function department()
+{
+    return $this->belongsTo(Department::class, 'departamento_id');
+}
+
+public function province()
+{
+    return $this->belongsTo(Province::class, 'provincia_id');
+}
+
+public function district()
+{
+    return $this->belongsTo(District::class, 'distrito_id');
 }
 
 }

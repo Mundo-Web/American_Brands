@@ -74,7 +74,7 @@ class User extends Authenticatable
 
     public function direccion()
     {
-        return $this->hasMany(UserDetails::class);
+        return $this->hasMany(UserDetails::class, 'email', 'email');
     }
     public function wishlistItems()
     {

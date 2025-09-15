@@ -149,6 +149,8 @@ Route::middleware(['auth:sanctum', 'verified', 'can:Admin'])->group(function () 
         Route::resource('/shortcode', ShortcodeController::class);
 
         Route::resource('/pedidos', SaleController::class);
+        Route::resource('/clientes', \App\Http\Controllers\ClientsController::class);
+        Route::post('/clientes/borrar', [\App\Http\Controllers\ClientsController::class, 'borrar'])->name('clientes.borrar');
 
         Route::get('/politica-datos/{id}', [PoliticaDatosController::class, 'edit'])->name('politicadatos.detalle');
         Route::post('/politica-datos/update/{id}', [PoliticaDatosController::class, 'update'])->name('politicadatos.act');

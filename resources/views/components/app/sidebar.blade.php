@@ -38,6 +38,7 @@
             </x-slot>
           @endif
         </x-menu.item>
+        <x-menu.item id="clientes" href="{{ route('clientes.index') }}" icon="fas fa-users">Clientes</x-menu.item>
         <x-menu.item id="mensajes" href="{{ route('mensajes.index') }}" icon="fas fa-comments">
           Mensajes
           @if ($mensajes !== 0)
