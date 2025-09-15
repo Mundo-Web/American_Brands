@@ -282,12 +282,12 @@
       <div class="flex w-3/12 justify-end md:justify-end items-center gap-2 max-w-96 my-auto">
         <div class="flex flex-row justify-between gap-2 lg:gap-4 mt-1">
           @if (Auth::user() == null)
-            <a class="hidden md:flex" href="{{ route('login') }}">
+            <a class="flex" href="{{ route('login') }}">
               {{-- <i class="fa-solid fa-user-large fa-xl text-white !leading-none"></i> --}}
               <img src="{{ asset('images/svg/user.svg') }}" class="text-white w-7" /></a>
             </a>
           @else
-            <div class="relative  hidden md:inline-flex font-Urbanist_Bold" x-data="{ open: false }">
+            <div class="relative  inline-flex font-Urbanist_Bold" x-data="{ open: false }">
               <button class="px-3 py-0 inline-flex justify-center items-center group" aria-haspopup="true"
                 @click.prevent="open = !open" :aria-expanded="open">
                 <div class="flex items-center truncate">
