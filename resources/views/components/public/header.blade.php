@@ -280,27 +280,29 @@
 
       {{-- Iconos --}}
       <div class="flex w-3/12 justify-end md:justify-end items-center gap-2 max-w-96 my-auto">
-        <div class="flex flex-row justify-between gap-2 lg:gap-4 mt-1">
+        <div class="flex flex-row justify-between items-center ml-2 lg:ml-0 gap-2 lg:gap-4 mt-1">
           @if (Auth::user() == null)
-            <a class="flex" href="{{ route('login') }}">
+            <a class="w-6 h-6 lg:w-auto lg:h-autoflex" href="{{ route('login') }}">
               {{-- <i class="fa-solid fa-user-large fa-xl text-white !leading-none"></i> --}}
               <img src="{{ asset('images/svg/user.svg') }}" class="text-white w-7" /></a>
             </a>
           @else
             <div class="relative  inline-flex font-Urbanist_Bold" x-data="{ open: false }">
-              <button class="px-3 py-0 inline-flex justify-center items-center group" aria-haspopup="true"
+              <button class="lg:px-3 py-0 inline-flex justify-center items-center group" aria-haspopup="true"
                 @click.prevent="open = !open" :aria-expanded="open">
                 <div class="flex items-center truncate">
                   <span id="username"
-                    class="truncate ml-2 text-sm font-medium dark:text-slate-300 group-hover:opacity-75 dark:group-hover:text-slate-200 text-white ">
-                    {{ explode(' ', Auth::user()->name)[0] }}</span>
-                  <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400" viewBox="0 0 12 12">
+                    class="hidden lg:flex truncate lg:ml-2 text-sm font-medium dark:text-slate-300 group-hover:opacity-75 dark:group-hover:text-slate-200 text-white ">
+                    {{ explode(' ', Auth::user()->name)[0] }}
+                  </span>
+                   <img src="{{ asset('images/svg/user.svg') }}" class="block lg:hidden min-w-6 min-h-6 text-white" />
+                    <svg class="min-h-2 min-w-2 lg:w-3 lg:h-3 lg:shrink-0 lg:ml-1 fill-current text-white" viewBox="0 0 12 12">
                     <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
                   </svg>
                 </div>
               </button>
               <div
-                class="bg-white origin-top-right z-10 absolute top-full min-w-44 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                class="bg-white right-0 lg:origin-top-right z-10 absolute top-full min-w-max lg:min-w-44 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1"
                 @click.outside="open = false" @keydown.escape.window="open = false" x-show="open">
                 <ul>
                   <li class="hover:bg-gray-100">
