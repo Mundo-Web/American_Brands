@@ -85,11 +85,11 @@
           <!-- Acciones -->
           <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
             <div class="flex flex-wrap gap-3">
-              <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+              <button onclick="enviarEmail('{{ $client->email }}')" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
                 <i class="fas fa-envelope mr-2"></i>
                 Enviar Email
               </button>
-              <button class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
+              <button onclick="llamarCliente('{{ $client->direccion && $client->direccion->first() ? $client->direccion->first()->phone : '' }}')" class="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out">
                 <i class="fas fa-phone mr-2"></i>
                 Llamar
               </button>
@@ -111,6 +111,47 @@
   </div>
 
   <script>
+    function enviarEmail(email) {
+      if (!email) {
+        Swal.fire({
+          title: 'Error',
+          text: 'No hay email disponible para este cliente',
+          icon: 'error'
+        });
+        return;
+      }
+      
+      // Abrir el cliente de email del sistema
+      window.location.href = 'mailto:' + email + '?subject=Contacto desde American Brands&body=Estimado/a cliente,%0D%0A%0D%0A';
+    }
+
+    function llamarCliente(telefono) {
+      if (!telefono) {
+        Swal.fire({
+          title: 'Sin teléfono',
+          text: 'Este cliente no tiene un número de teléfono registrado',
+          icon: 'warning'
+        });
+        return;
+      }
+      
+      Swal.fire({
+        title: 'Llamar a cliente',
+        text: `¿Deseas llamar al número ${telefono}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#10b981',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: 'Sí, llamar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Intentar abrir la aplicación de teléfono
+          window.location.href = 'tel:' + telefono;
+        }
+      });
+    }
+
     function confirmDeactivate(clientId) {
       Swal.fire({
         title: '¿Desactivar cliente?',
