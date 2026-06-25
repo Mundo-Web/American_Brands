@@ -14,11 +14,11 @@ class IzipayController extends Controller
     public static function token(Sale $sale)
     {
 
-        $clientId = env('IZIPAY_CLIENT_ID');
-        $clientSecret = env('IZIPAY_CLIENT_SECRET');
+        $clientId = config('services.izipay.client_id');
+        $clientSecret = config('services.izipay.client_secret');
         $auth = base64_encode($clientId . ':' . $clientSecret);
 
-        $url = env('IZIPAY_URL');
+        $url = config('services.izipay.url');
 
         $totalAmount = $sale->total + $sale->address_price;
 

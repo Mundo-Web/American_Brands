@@ -59,6 +59,10 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'protocol' => env('APP_PROTOCOL', 'https'),
+
+    'domain' => env('APP_DOMAIN'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

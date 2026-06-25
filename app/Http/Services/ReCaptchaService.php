@@ -9,7 +9,7 @@ class ReCaptchaService extends BasicService
   static function verify($token)
   {
     
-    $secret = env('NOCAPTCHA_SECRET');
+    $secret = config('captcha.secret');
     $url = 'https://www.google.com/recaptcha/api/siteverify';
 
     try {

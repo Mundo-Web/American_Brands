@@ -22,7 +22,7 @@ class PaymentController extends Controller
   {
     $body = $request->all();
     $response = new Response();
-    $culqi = new Culqi(['api_key' => env('CULQI_PRIVATE_KEY')]);
+    $culqi = new Culqi(['api_key' => config('services.culqi.private_key')]);
 
     $sale = new Sale();
     try {
@@ -172,7 +172,7 @@ class PaymentController extends Controller
         "amount" => round($totalCost * 100),
         "capture" => true,
         "currency_code" => "PEN",
-        "description" => "Compra en " . env('APP_NAME'),
+        "description" => "Compra en " . config('app.name'),
         "email" => $body['culqi']['email'] ?? $body['contact']['email'],
         "installments" => 0,
         "antifraud_details" => [

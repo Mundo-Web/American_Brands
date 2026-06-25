@@ -1,7 +1,7 @@
 @extends('components.public.matrix', ['pagina' => ''])
 
 <script src="https://static.micuentaweb.pe/static/js/krypton-client/V4.0/stable/kr-payment-form.min.js"
-  kr-public-key="{{ env('IZIPAY_PUBLIC_KEY') }}"
+  kr-public-key="{{ config('services.izipay.public_key') }}"
   kr-post-url-success="{{ route('agradecimiento', ['codigoCompra' => $sale->code]) }}"></script>
 
 <link rel="stylesheet" href="https://static.micuentaweb.pe/static/js/krypton-client/V4.0/ext/classic-reset.min.css">

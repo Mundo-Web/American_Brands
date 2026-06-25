@@ -55,7 +55,7 @@ class BlogController extends Controller
   public function store(Request $request)
   {
 
-    $appUrl = env('APP_URL');
+    $appUrl = config('app.url');
     $newsletter = new NewsletterSubscriberController();
     
     $request->validate([

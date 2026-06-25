@@ -71,9 +71,9 @@ class AuthController extends Controller
         }
 
         return Inertia::render('Login', [
-            'APP_PROTOCOL' => env('APP_PROTOCOL', 'https'),
-            'APP_DOMAIN' => env('APP_DOMAIN'),
-            'APP_URL' => env('APP_URL'),
+            'APP_PROTOCOL' => config('app.protocol', 'https'),
+            'APP_DOMAIN' => config('app.domain'),
+            'APP_URL' => config('app.url'),
             'PUBLIC_RSA_KEY' => Controller::$PUBLIC_RSA_KEY,
             'message' => $message ?? null
         ])->rootView('auth');
@@ -88,10 +88,10 @@ class AuthController extends Controller
         // ...
 
         return Inertia::render('Register', [
-            'APP_PROTOCOL' => env('APP_PROTOCOL', 'https'),
+            'APP_PROTOCOL' => config('app.protocol', 'https'),
             'PUBLIC_RSA_KEY' => Controller::$PUBLIC_RSA_KEY,
-            'RECAPTCHA_SITE_KEY' => env('NOCAPTCHA_SITEKEY'),
-            'APP_URL' => env('APP_URL'),
+            'RECAPTCHA_SITE_KEY' => config('captcha.sitekey'),
+            'APP_URL' => config('app.url'),
             'terms' => Constant::value('terms')
         ])->rootView('auth');
     }
@@ -180,7 +180,7 @@ class AuthController extends Controller
             ]);
 
             $content = Constant::value('confirm-email');
-            $content = str_replace('{URL_CONFIRM}', env('APP_URL') . '/confirmation/' . $preUserJpa->confirmation_token, $content);
+            $content = str_replace('{URL_CONFIRM}', config('app.url') . '/confirmation/' . $preUserJpa->confirmation_token, $content);
 
             $name = '';
             $mensaje = "";

@@ -37,9 +37,9 @@ class RegisterResponse implements RegisterResponseContract
 
     private function envioCorreo($data){
         
-        $appUrl = env('APP_URL');
+        $appUrl = config('app.url');
         $name = $data['name'];
-        $mensaje = "Gracias por registrarse en ".env('APP_NAME');
+        $mensaje = "Gracias por registrarse en " . config('app.name');
         $mail = EmailConfig::config($name, $mensaje);
         try {
             $mail->addAddress($data['email']);

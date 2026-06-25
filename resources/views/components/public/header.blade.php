@@ -804,7 +804,7 @@
     $('#itemsCarritoCheck').html('')
   }
 
-  var appUrl = "{{ env('APP_URL') }}";
+  var appUrl = "{{ config('app.url') }}";
 
   $(document).ready(function() {
 

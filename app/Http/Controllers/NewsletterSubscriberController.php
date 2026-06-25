@@ -85,8 +85,8 @@ class NewsletterSubscriberController extends Controller
   private function envioCorreo($data)
   {
 
-    $appUrl = env('APP_URL');
-    $appName = env('APP_NAME');
+    $appUrl = config('app.url');
+    $appName = config('app.name');
     $name = '';
     $mensaje = "Gracias por comunicarte con $appName";
     $mail = EmailConfig::config($name, $mensaje);
@@ -440,9 +440,9 @@ class NewsletterSubscriberController extends Controller
       //code...
       $subscripciones = NewsletterSubscriber::all();
       $general = General::all()->first();
-      $appUrl = env('APP_URL');
+      $appUrl = config('app.url');
       $name = '';
-      $mensaje = env('APP_NAME'). 'Acaba de publicar un nuevo post ';
+      $mensaje = config('app.name'). 'Acaba de publicar un nuevo post ';
       $mail = EmailConfig::config($name, $mensaje);
       $mail->Subject = 'Nuevo Post Publicado';
       $mail->Body = $plantilla;

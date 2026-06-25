@@ -75,7 +75,7 @@ class IndexController extends Controller
   public function index()
   {
     // $productos = Products::all();
-    $url_env = env('APP_URL');
+    $url_env = config('app.url');
     $productos = [];  //Products::with('tags')->get();
     $ultimosProductos = Products::select('products.*')->join('categories', 'products.categoria_id', '=', 'categories.id')->where('categories.visible', 1)->where('products.status', '=', 1)->where('products.visible', '=', 1)->orderBy('products.id', 'desc')->take(4)->get();
     $productosPupulares = Products::select('products.*')
@@ -224,7 +224,7 @@ class IndexController extends Controller
     $comentarios = Testimony::where('status', '=', 1)->where('visible', '=', 1)->paginate(15);
     $categorias = Category::all();
     $contarcomentarios = count($comentarios);
-    $url_env = env('APP_URL');
+    $url_env = config('app.url');
     $destacados = Products::where('destacar', '=', 1)->where('status', '=', 1)
       ->where('visible', '=', 1)->with('tags')->activeDestacado()->get();
     return view('public.comentario', compact('comentarios', 'contarcomentarios', 'url_env', 'categorias', 'destacados'));
@@ -280,7 +280,7 @@ class IndexController extends Controller
   {
     $general = General::first();
     $categorias = Category::all();
-    $url_env = env('APP_URL');
+    $url_env = config('app.url');
     $destacados = Products::where('destacar', '=', 1)->where('status', '=', 1)
       ->where('visible', '=', 1)->with('tags')->activeDestacado()->get();
 
@@ -354,7 +354,7 @@ class IndexController extends Controller
     $destacados = Products::where('destacar', '=', 1)->where('status', '=', 1)
       ->where('visible', '=', 1)->with('tags')->activeDestacado()->get();
     $categorias = Category::all();
-    $url_env = env('APP_URL');
+    $url_env = config('app.url');
     return view('public.checkout_carrito', compact('user', 'historicoCupones', 'url_env', 'categorias', 'destacados', 'districts', 'provinces', 'departments', 'addresses', 'hasDefaultAddress'));
   }
 
@@ -423,8 +423,8 @@ class IndexController extends Controller
       ->where('visible', '=', 1)->with('tags')->activeDestacado()->get();
 
 
-    $url_env = env('APP_URL');
-    $culqi_public_key = env('CULQI_PUBLIC_KEY');
+    $url_env = config('app.url');
+    $culqi_public_key = config('services.culqi.public_key');
 
     $addresses = [];
     $hasDefaultAddress = false;
@@ -450,14 +450,14 @@ class IndexController extends Controller
   public function procesarPago(Request $request)
   {
     $response = new Response();
-    $culqi = new Culqi(['api_key' => env('CULQI_PRIVATE_KEY')]);
+    $culqi = new Culqi(['api_key' => config('services.culqi.private_key')]);
     try {
 
       $charge = $culqi->Charges->create([
         "amount" => 1000,
         "capture" => true,
         "currency_code" => "PEN",
-        "description" => "Compra en " . env('APP_NAME'),
+        "description" => "Compra en " . config('app.name'),
         "email" => "test@culqi.com",
         "installments" => 0,
         "antifraud_details" => array(
@@ -846,7 +846,7 @@ class IndexController extends Controller
     $atributos = Attributes::where("status", "=", true)->get();
     $valorAtributo = AttributesValues::where("status", "=", true)->get();
     $valoresdeatributo = AttributeProductValues::where("product_id", "=", $id)->get();
-    $url_env = env('APP_URL');
+    $url_env = config('app.url');
 
     $capitalizeFirstLetter = function ($string) {
       // Convert the entire string to lowercase
@@ -1021,7 +1021,7 @@ class IndexController extends Controller
 
   private function envioCorreo($data)
   {
-    $appUrl = env('APP_URL');
+    $appUrl = config('app.url');
     $name = $data['full_name'];
     $mensaje = "Gracias por comunicarte con American Brands";
     $mail = EmailConfig::config($name, $mensaje);
@@ -1205,7 +1205,7 @@ class IndexController extends Controller
   public function envioCorreoCompra($data)
   {
 
-    $appUrl = env('APP_URL');
+    $appUrl = config('app.url');
     $name = $data['nombre'];
     $mensaje = "Gracias por comprar en $appUrl ";
     $mail = EmailConfig::config($name, $mensaje);
@@ -1451,7 +1451,7 @@ class IndexController extends Controller
   public function help()
   {
     $faqs = Faqs::where('status', '=', 1)->where('visible', '=', 1)->get();
-    $url_env = env('APP_URL');
+    $url_env = config('app.url');
     return view('public.help', compact('url_env', 'faqs'));
   }
 }
