@@ -604,17 +604,23 @@ function PintarCarrito() {
 
   carritoParaPintar.forEach(item => {
     total += item.totalPrice
+    var appUrl = typeof APP_URL !== 'undefined' ? APP_URL : '/'
     let plantilla = `<tr class="font-Urbanist_Regular border-b">
           <td class="p-2 w-24">
-            <img src="${appUrl}/${item.imagen}" class="block bg-[#F3F5F7] rounded-md p-0 w-24 object-contain" alt="producto" onerror="this.onerror=null;this.src='/images/img/noimagen.jpg';"  style="width: 100px; height: 75px; object-fit: contain; object-position: center;" />
+            <img src="${appUrl}${item.imagen}" class="block bg-[#F3F5F7] rounded-md p-0 w-24 object-contain" alt="producto" onerror="this.onerror=null;this.src='/images/img/noimagen.jpg';"  style="width: 100px; height: 75px; object-fit: contain; object-position: center;" />
           </td>
 
           <td class="p-2">
             <div class="flex flex-col mb-1">
+              ${item.marcas && item.marcas.url_image ? `<img src="${appUrl}${item.marcas.url_image}" class="h-3 w-auto object-left mb-1" style="object-position: left; object-fit: contain;" onerror="this.style.display='none'" />` : ''}
               <p class="limited-text font-semibold text-[14px] text-[#151515] line-clamp-1">
                 ${item.producto}
               </p>
-              <span class="font-light text-[12px] text-[#151515]">${item.color} - ${item.peso}</span>
+              <div class="flex items-center gap-1.5 font-light text-[12px] text-[#151515] mt-1">
+                ${item.color ? `COLOR <div class="w-4 h-4 rounded-full overflow-hidden border border-gray-300 inline-block flex-shrink-0"><img class="w-full h-full object-cover" src="${appUrl}${item.imagen}" onerror="this.onerror=null;this.src='/images/img/noimagen.jpg';" /></div>` : ''}
+                ${item.color && item.peso ? '<span class="mx-1">-</span>' : ''}
+                ${item.peso ? `TALLA ${item.peso}` : ''}
+              </div>
             </div>
             <div class="flex gap-2 items-center">
               <div class="flex w-15 justify-center text-[#151515] border-[1px] border-[#6C7275] rounded-md">

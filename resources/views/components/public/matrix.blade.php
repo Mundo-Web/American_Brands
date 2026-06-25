@@ -66,6 +66,7 @@
     <script src="/js/cookies.extend.js"></script>
 
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <script>window.APP_URL = "{{ asset('') }}";</script>
     <script src="{{ asset('js/functions.js') }}?v={{ uniqid() }}"></script>
     <style>
         .select2-container .select2-selection--single {
