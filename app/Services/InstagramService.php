@@ -13,14 +13,18 @@ class InstagramService
 
     public function __construct()
     {
-        $general = General::find(1);
+        //$general = General::find(1);
         
         $this->client = new Client();
-        $this->accessToken = $general->ig_token ?? "";
+    //    $this->accessToken = $general->ig_token ?? "";
     }
 
     public function getUserMedia()
     {
+          if ($this->accessToken === null) {
+            $general = General::find(1);
+            $this->accessToken = $general->ig_token ?? "";
+        }
         if (empty($this->accessToken)) {
             error_log("Instagram access token is not set.");
             return [];

@@ -73,7 +73,47 @@ use App\Models\LibroReclamaciones;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+/* SEO: Sitemap y Robots */
+use App\Http\Controllers\SitemapController;
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/robots.txt', function () {
+    $baseUrl = rtrim(config('app.url'), '/');
+    $content  = "# robots.txt - American Brands\n";
+    $content .= "User-agent: *\n";
+    $content .= "Allow: /\n\n";
+    $content .= "# Bloquear rutas de administración\n";
+    $content .= "Disallow: /admin/\n";
+    $content .= "Disallow: /admin/*\n\n";
+    $content .= "# Bloquear rutas privadas de usuario\n";
+    $content .= "Disallow: /micuenta\n";
+    $content .= "Disallow: /micuenta/*\n\n";
+    $content .= "# Bloquear proceso de pago\n";
+    $content .= "Disallow: /pago/\n";
+    $content .= "Disallow: /pago/*\n";
+    $content .= "Disallow: /agradecimiento\n";
+    $content .= "Disallow: /procesar/pago\n\n";
+    $content .= "# Bloquear rutas internas/API\n";
+    $content .= "Disallow: /register-rev\n";
+    $content .= "Disallow: /login\n";
+    $content .= "Disallow: /register\n";
+    $content .= "Disallow: /confirm-email/\n";
+    $content .= "Disallow: /confirmation/\n";
+    $content .= "Disallow: /guardarContactos\n";
+    $content .= "Disallow: /guardarformulario\n";
+    $content .= "Disallow: /guardarUserNewsLetter\n";
+    $content .= "Disallow: /carrito/buscarProducto\n";
+    $content .= "Disallow: /guardar-busqueda\n";
+    $content .= "Disallow: /terminos-mas-buscados\n";
+    $content .= "Disallow: /obtenerProvincia/\n";
+    $content .= "Disallow: /obtenerDistritos/\n";
+    $content .= "Disallow: /buscarTalla\n\n";
+    $content .= "# Bloquear recursos estáticos innecesarios\n";
+    $content .= "Disallow: /build/\n";
+    $content .= "Disallow: /storage/\n\n";
+    $content .= "# Sitemap\n";
+    $content .= "Sitemap: {$baseUrl}/sitemap.xml\n";
+    return response($content, 200)->header('Content-Type', 'text/plain; charset=UTF-8');
+});
 /* Las rutas publicas */
 // Route::get('/login-rev', [AuthController::class, 'loginView'])->name('Login.jsx');
 Route::get('/register-rev', [AuthController::class, 'registerView'])->name('Register.jsx');

@@ -76,7 +76,7 @@ class IndexController extends Controller
   {
     // $productos = Products::all();
     $url_env = env('APP_URL');
-    $productos =  Products::with('tags')->get();
+    $productos = [];  //Products::with('tags')->get();
     $ultimosProductos = Products::select('products.*')->join('categories', 'products.categoria_id', '=', 'categories.id')->where('categories.visible', 1)->where('products.status', '=', 1)->where('products.visible', '=', 1)->orderBy('products.id', 'desc')->take(4)->get();
     $productosPupulares = Products::select('products.*')
       ->join('categories', 'products.categoria_id', '=', 'categories.id')

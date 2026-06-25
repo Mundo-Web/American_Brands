@@ -21,4 +21,12 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+    
+    # 1. Bloquear la IP del atacante que busca vulnerabilidades de WordPress
+Deny from 85.204.70.106
+
+# 2. Bloquear bots de SEO agresivos que consumen todo tu IOPS
+RewriteEngine On
+RewriteCond %{HTTP_USER_AGENT} (AhrefsBot|PetalBot|DotBot|MJ12bot) [NC]
+RewriteRule .* - [F,L]
 </IfModule>

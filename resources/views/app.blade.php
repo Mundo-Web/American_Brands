@@ -187,9 +187,11 @@
   </style>
 
 
+  @include('components.shortcode.contain_head')
 </head>
 
 <body class="body">
+  @include('components.shortcode.contain_body')
   <div class="overlay"></div>
   <x-public.header />
   @inertia
