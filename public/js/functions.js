@@ -617,7 +617,7 @@ function PintarCarrito() {
                 ${item.producto}
               </p>
               <div class="flex items-center gap-1.5 font-light text-[12px] text-[#151515] mt-1">
-                ${item.color ? `COLOR <div class="w-4 h-4 rounded-full overflow-hidden border border-gray-300 inline-block flex-shrink-0"><img class="w-full h-full object-cover" src="${appUrl}${item.imagen}" onerror="this.onerror=null;this.src='/images/img/noimagen.jpg';" /></div>` : ''}
+                ${item.color ? `COLOR: ${item.color} <div class="w-4 h-4 rounded-full overflow-hidden border border-gray-300 inline-block flex-shrink-0"><img class="w-full h-full object-cover" src="${appUrl}${item.image_texture ? item.image_texture : item.imagen}" onerror="this.onerror=null;this.src='/images/img/noimagen.jpg';" /></div>` : ''}
                 ${item.color && item.peso ? '<span class="mx-1">-</span>' : ''}
                 ${item.peso ? `TALLA ${item.peso}` : ''}
               </div>
